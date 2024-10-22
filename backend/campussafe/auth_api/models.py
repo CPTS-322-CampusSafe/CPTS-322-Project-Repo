@@ -14,6 +14,6 @@ class UserSettings(models.Model):
 # Adds additional information to user model, including phone number
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE) # the profile is associated with one user
-    phone_number = PhoneNumberField(null=False, blank=False, unique=True)
-    is_user_admin = models.BooleanField(null=False, blank=False, default=False)
-    user_settings = models.OneToOneField(UserSettings, on_delete=models.CASCADE, null=True, default=None)
+    phone_number = PhoneNumberField(null=True, blank=False, unique=True)
+    is_user_admin = models.BooleanField(default=False)
+    user_settings = models.OneToOneField(UserSettings, on_delete=models.CASCADE, default=None)

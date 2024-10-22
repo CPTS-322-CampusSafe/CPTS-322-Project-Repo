@@ -2,8 +2,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
-from django.contrib.auth import authenticate, login
-from .serializers import UserSerializer
+from django.contrib.auth import authenticate, login, logout
 
 @api_view(["POST"])
 def login_view(request):
@@ -60,3 +59,12 @@ def get_profile_view(request):
         return Response(profile)
     else:
         return Response("Not logged in", status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view(["POST"])
+def logout_view(request):
+    """
+    Logs out the user.
+    """
+
+    logout(request)
+    return Response()

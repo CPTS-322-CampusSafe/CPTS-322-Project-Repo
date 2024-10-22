@@ -7,8 +7,12 @@ from .serializers import UserSerializer
 
 @api_view(["POST"])
 def login_view(request):
-    username = request.POST["username"]
-    password = request.POST["password"]
+    """
+    Logs in the user.
+    """
+
+    username = request.data["username"]
+    password = request.data["password"]
 
     user = authenticate(request, username=username, password=password)
 
@@ -20,6 +24,12 @@ def login_view(request):
 
 @api_view(["GET"])
 def is_logged_in_view(request):
+    """
+    Checks whether the requester is logged in.
+    Will return their username if they are logged in, and
+    will return an empty string if they are not logged in.
+    """
+
     username = request.user.username
 
     return Response({

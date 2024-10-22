@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'login_api.apps.LoginApiConfig',
-    "phonenumber_field", # for the django-phonenumber-field library
+    'phonenumber_field', # for the django-phonenumber-field library
+    'rest_framework', # for the django-rest-framework
 ]
 
 MIDDLEWARE = [

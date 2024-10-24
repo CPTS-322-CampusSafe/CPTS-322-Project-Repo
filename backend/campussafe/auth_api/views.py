@@ -17,19 +17,19 @@ def register_view(request):
     try:
         phone_number = request.data["phone_number"]
     except:
-        return Response("Missing phone number", status=status.HTTP_400_BAD_REQUEST)
+        return Response({ "phone_number": ["This field is required"] }, status=status.HTTP_400_BAD_REQUEST)
 
     # Make sure the phone number is a valid phone number
     try:
         validate_international_phonenumber(phone_number)
     except:
-        return Response("Invalid phone number", status=status.HTTP_400_BAD_REQUEST)
+        return Response({ "phone_number": ["Invalid phone number"] }, status=status.HTTP_400_BAD_REQUEST)
 
     # Make sure a user_data section is present
     try:
         user_data = request.data["user_data"]
     except:
-        return Response("Missing important information", status=status.HTTP_400_BAD_REQUEST)
+        return Response({ "user_data": ["This field is required"] }, status=status.HTTP_400_BAD_REQUEST)
 
     # Serialize the user_data and other information
     serializer = UserSerializer(data=user_data)
@@ -39,7 +39,7 @@ def register_view(request):
         profile = Profile.objects.create(user=user,user_settings=user_settings,phone_number=phone_number) # Create user profile
         return Response("Successfully registered")
     else:
-        return Response("Failed to register", status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["POST"])
 def login_view(request):

@@ -35,8 +35,8 @@ def register_view(request):
     serializer = UserSerializer(data=user_data)
     if serializer.is_valid():
         user = serializer.save() # Create user
-        user_settings = UserSettings.objects.create() # Create user settings
-        profile = Profile.objects.create(user=user,user_settings=user_settings,phone_number=phone_number) # Create user profile
+        profile = Profile.objects.create(user=user,phone_number=phone_number) # Create user profile
+        user_settings = UserSettings.objects.create(profile=profile) # Create user settings
         return Response("Successfully registered")
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -87,9 +87,9 @@ def get_profile_view(request):
             "phone_number": request.user.profile.phone_number.as_e164,
             "is_user_admin": request.user.profile.is_user_admin,
             "settings": {
-                "recieve_email_notifications": request.user.profile.user_settings.recieve_email_notifications,
-                "recieve_SMS_notifications": request.user.profile.user_settings.recieve_SMS_notifications,
-                "recieve_in_app_notifications": request.user.profile.user_settings.recieve_in_app_notifications,
+                "recieve_email_notifications": request.user.profile.usersettings.recieve_email_notifications,
+                "recieve_SMS_notifications": request.user.profile.usersettings.recieve_SMS_notifications,
+                "recieve_in_app_notifications": request.user.profile.usersettings.recieve_in_app_notifications,
             }
         }
 

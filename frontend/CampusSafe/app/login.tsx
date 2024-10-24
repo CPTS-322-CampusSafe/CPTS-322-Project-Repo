@@ -1,16 +1,23 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleLogin = () => {
-    if (email === '' || password === '') {
-      setError('Both fields are required.');
+    if (email === "" || password === "") {
+      setError("Both fields are required.");
     } else {
-      setError('');
+      setError("");
       // Handle login logic here
     }
   };
@@ -52,16 +59,15 @@ const LoginPage = () => {
 
 const styles = StyleSheet.create({
   loginContainer: {
-    width: '80%',
-    margin: 'auto',
+    width: "80%",
+    margin: "auto",
     padding: 20,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 8,
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', // Note: You can remove this in RN since shadow handling is different
   },
   title: {
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 20,
     fontSize: 24,
   },
@@ -69,29 +75,29 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   input: {
-    width: '100%',
+    width: "100%",
     padding: 10,
     marginVertical: 5,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 4,
   },
   errorInput: {
-    borderColor: 'red',
+    borderColor: "red",
   },
   errorMessage: {
-    color: 'red',
+    color: "red",
     fontSize: 12,
     marginBottom: 10,
   },
   loginBtn: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: "#4CAF50",
     padding: 10,
     borderRadius: 4,
-    alignItems: 'center',
+    alignItems: "center",
   },
   loginBtnText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
   },
 });

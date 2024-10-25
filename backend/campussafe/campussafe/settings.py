@@ -37,8 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'login_api.apps.LoginApiConfig',
-    "phonenumber_field", # for the django-phonenumber-field library
+    'auth_api.apps.AuthApiConfig',
+    'phonenumber_field', # for the django-phonenumber-field library
+    'rest_framework', # for the django-rest-framework
 ]
 
 MIDDLEWARE = [
@@ -125,7 +126,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Make Django's authentication system use a custom user model
-AUTH_USER_MODEL = "login_api.User"
+AUTH_USER_MODEL = "auth_api.User"
 
 # default region for interpreting phone numbers (United States)
 PHONENUMBER_DEFAULT_REGION = "US"

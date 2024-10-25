@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'auth_api.apps.AuthApiConfig',
     'phonenumber_field', # for the django-phonenumber-field library
     'rest_framework', # for the django-rest-framework
+    'nested_admin', # for the django-nested-admin library
 ]
 
 MIDDLEWARE = [

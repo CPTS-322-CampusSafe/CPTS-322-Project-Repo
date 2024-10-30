@@ -1,19 +1,24 @@
 import React, { useState } from "react";
-import { TextInput, View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {
+  TextInput,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import LoginPage from "./login";
 
 const Tab = createBottomTabNavigator();
-
 
 const ReportsScreen = () => {
   const [search, setSearch] = useState("");
 
   return (
     <View style={{ flex: 1 }}>
-
       {/* Create Report Button */}
-      <TouchableOpacity style={styles.button} >
+      <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Create Report</Text>
       </TouchableOpacity>
 
@@ -52,36 +57,54 @@ export default function Index() {
     <View style={{ flex: 1 }}>
       <Tab.Navigator>
         {/* navigates between screens */}
-        <Tab.Screen 
-          name="Reports" 
-          component={ReportsScreen} 
-          options={{ title: 'Reports' ,headerTitleStyle: { 
-            fontSize: 20, height: 30, 
-          }}} 
+        <Tab.Screen
+          name="Reports"
+          component={ReportsScreen}
+          options={{
+            title: "Reports",
+            headerTitleStyle: {
+              fontSize: 20,
+              height: 30,
+            },
+          }}
         />
-        <Tab.Screen 
-          name="Resources" 
-          component={ResourcesScreen} 
-          options={{ title: 'Resources' ,headerTitleStyle: { 
-            fontSize: 20, 
-          }}} 
+        {/*THIS IS TEMPORARY*/}
+        <Tab.Screen
+          name="Login"
+          component={LoginPage}
+          options={{
+            title: "Login",
+            headerTitleStyle: {
+              fontSize: 20,
+              height: 30,
+            },
+          }}
         />
-        <Tab.Screen 
-          name="Profile" 
-          component={ProfileScreen} 
-          options={{ title: 'Profile',
-            headerTitleStyle: { 
-            fontSize: 20, 
-          } }} 
-          
+        <Tab.Screen
+          name="Resources"
+          component={ResourcesScreen}
+          options={{
+            title: "Resources",
+            headerTitleStyle: {
+              fontSize: 20,
+            },
+          }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{
+            title: "Profile",
+            headerTitleStyle: {
+              fontSize: 20,
+            },
+          }}
         />
       </Tab.Navigator>
     </View>
   );
-
 }
 const styles = StyleSheet.create({
-
   button: {
     width: 140,
     height: 34,
@@ -91,8 +114,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#990000", // Button color
     padding: 5,
     borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center', 
+    justifyContent: "center",
+    alignItems: "center",
   },
   buttonText: {
     color: "#fff", // Text color for the button
@@ -103,7 +126,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 70, // Adjust position to match the new title position
     left: "45%",
-    transform: [{ translateX: -150 }],  // Center the input
+    transform: [{ translateX: -150 }], // Center the input
     width: 335,
   },
   searchInput: {
@@ -118,7 +141,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 130, // Adjust position below the search bar
     left: "45%",
-    transform: [{ translateX: -150 }],  // Center the box horizontally
+    transform: [{ translateX: -150 }], // Center the box horizontally
     width: 335,
     height: 490, // Set the height of the box
     borderWidth: 1,
@@ -129,7 +152,7 @@ const styles = StyleSheet.create({
   },
   screen: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

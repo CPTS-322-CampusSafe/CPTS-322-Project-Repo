@@ -1,3 +1,4 @@
+import { login } from "@/authentication_system/authentication_system";
 import React, { useState } from "react";
 import {
   View,
@@ -18,7 +19,7 @@ const LoginPage = () => {
       setError("Both fields are required.");
     } else {
       setError("");
-      // Handle login logic here
+      login(email, password);
     }
   };
 

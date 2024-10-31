@@ -1,4 +1,4 @@
-import { login } from "@/authentication_system/authentication_system";
+import AuthenticationSystem from "@/authentication_system/authentication_system";
 import React, { useState } from "react";
 import {
   View,
@@ -15,11 +15,14 @@ const LoginPage = () => {
   const [error, setError] = useState("");
 
   const handleLogin = () => {
+    AuthenticationSystem.isLoggedIn().then((loggedIn) => {
+      console.log(`Logged in state: ${loggedIn}`);
+    });
     if (email === "" || password === "") {
       setError("Both fields are required.");
     } else {
       setError("");
-      login(email, password);
+      AuthenticationSystem.login(email, password);
     }
   };
 

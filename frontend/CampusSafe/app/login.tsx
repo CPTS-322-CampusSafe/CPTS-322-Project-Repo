@@ -1,109 +1,115 @@
 import AuthenticationSystem from "@/authentication_system/authentication_system";
 import React, { useState } from "react";
 import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  StyleSheet,
-  TouchableOpacity,
+    View,
+    Text,
+    TextInput,
+    Button,
+    StyleSheet,
+    TouchableOpacity,
 } from "react-native";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
 
-  const handleLogin = () => {
-    AuthenticationSystem.isLoggedIn().then((loggedIn) => {
-      console.log(`Logged in state: ${loggedIn}`);
-    });
-    if (email === "" || password === "") {
-      setError("Both fields are required.");
-    } else {
-      setError("");
-      AuthenticationSystem.login(email, password);
-    }
-  };
+    const handleLogin = () => {
+        AuthenticationSystem.isLoggedIn().then((loggedIn) => {
+            console.log(`Logged in state: ${loggedIn}`);
+        });
+        if (email === "" || password === "") {
+            setError("Both fields are required.");
+        } else {
+            setError("");
+            AuthenticationSystem.login(email, password);
+        }
+    };
 
-  return (
-    <View style={styles.loginContainer}>
-      <Text style={styles.title}>Login</Text>
+    return (
+        <View style={styles.loginContainer}>
+            <Text style={styles.title}>Login</Text>
 
-      <View style={styles.formGroup}>
-        <Text>Email</Text>
-        <TextInput
-          style={[styles.input, error && !email ? styles.errorInput : null]}
-          placeholder="Enter your email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-        />
-      </View>
+            <View style={styles.formGroup}>
+                <Text>Email</Text>
+                <TextInput
+                    style={[
+                        styles.input,
+                        error && !email ? styles.errorInput : null,
+                    ]}
+                    placeholder="Enter your email"
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                />
+            </View>
 
-      <View style={styles.formGroup}>
-        <Text>Password</Text>
-        <TextInput
-          style={[styles.input, error && !password ? styles.errorInput : null]}
-          placeholder="Enter your password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={true}
-        />
-      </View>
+            <View style={styles.formGroup}>
+                <Text>Password</Text>
+                <TextInput
+                    style={[
+                        styles.input,
+                        error && !password ? styles.errorInput : null,
+                    ]}
+                    placeholder="Enter your password"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry={true}
+                />
+            </View>
 
-      {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
+            {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
 
-      <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
-        <Text style={styles.loginBtnText}>Login</Text>
-      </TouchableOpacity>
-    </View>
-  );
+            <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
+                <Text style={styles.loginBtnText}>Login</Text>
+            </TouchableOpacity>
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
-  loginContainer: {
-    width: "80%",
-    margin: "auto",
-    padding: 20,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-  },
-  title: {
-    textAlign: "center",
-    marginBottom: 20,
-    fontSize: 24,
-  },
-  formGroup: {
-    marginBottom: 15,
-  },
-  input: {
-    width: "100%",
-    padding: 10,
-    marginVertical: 5,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 4,
-  },
-  errorInput: {
-    borderColor: "red",
-  },
-  errorMessage: {
-    color: "red",
-    fontSize: 12,
-    marginBottom: 10,
-  },
-  loginBtn: {
-    backgroundColor: "#4CAF50",
-    padding: 10,
-    borderRadius: 4,
-    alignItems: "center",
-  },
-  loginBtnText: {
-    color: "#fff",
-    fontSize: 16,
-  },
+    loginContainer: {
+        width: "80%",
+        margin: "auto",
+        padding: 20,
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 8,
+    },
+    title: {
+        textAlign: "center",
+        marginBottom: 20,
+        fontSize: 24,
+    },
+    formGroup: {
+        marginBottom: 15,
+    },
+    input: {
+        width: "100%",
+        padding: 10,
+        marginVertical: 5,
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 4,
+    },
+    errorInput: {
+        borderColor: "red",
+    },
+    errorMessage: {
+        color: "red",
+        fontSize: 12,
+        marginBottom: 10,
+    },
+    loginBtn: {
+        backgroundColor: "#4CAF50",
+        padding: 10,
+        borderRadius: 4,
+        alignItems: "center",
+    },
+    loginBtnText: {
+        color: "#fff",
+        fontSize: 16,
+    },
 });
 
 export default LoginPage;

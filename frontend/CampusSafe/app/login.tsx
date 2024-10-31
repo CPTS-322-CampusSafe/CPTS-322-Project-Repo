@@ -7,6 +7,7 @@ import {
     Button,
     StyleSheet,
     TouchableOpacity,
+    Pressable,
 } from "react-native";
 
 const LoginPage = () => {
@@ -15,14 +16,16 @@ const LoginPage = () => {
     const [error, setError] = useState("");
 
     const handleLogin = () => {
-        AuthenticationSystem.isLoggedIn().then((loggedIn) => {
-            console.log(`Logged in state: ${loggedIn}`);
-        });
         if (email === "" || password === "") {
             setError("Both fields are required.");
         } else {
             setError("");
-            AuthenticationSystem.login(email, password);
+            AuthenticationSystem.login(email, password).then((result) => {
+                if (result.success) {
+                    console.log("Login successful!");
+                    // Login was successful, so redirect to home screen here
+                }
+            });
         }
     };
 
@@ -63,6 +66,25 @@ const LoginPage = () => {
             <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
                 <Text style={styles.loginBtnText}>Login</Text>
             </TouchableOpacity>
+
+            {/*TEMPORATY BUTTONS*/}
+            <Pressable
+                onPress={() => {
+                    AuthenticationSystem.logout();
+                }}
+            >
+                <Text>Logout</Text>
+            </Pressable>
+
+            <Pressable
+                onPress={() => {
+                    AuthenticationSystem.isLoggedIn().then((loggedIn) => {
+                        console.log(`Logged in state: ${loggedIn}`);
+                    });
+                }}
+            >
+                <Text>Is Logged In</Text>
+            </Pressable>
         </View>
     );
 };

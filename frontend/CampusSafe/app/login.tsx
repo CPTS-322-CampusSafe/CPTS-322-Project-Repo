@@ -1,14 +1,6 @@
 import AuthenticationSystem from "@/authentication_system/authentication_system";
 import React, { useState } from "react";
-import {
-    View,
-    Text,
-    TextInput,
-    Button,
-    StyleSheet,
-    TouchableOpacity,
-    Pressable,
-} from "react-native";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Pressable } from "react-native";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -35,30 +27,12 @@ const LoginPage = () => {
 
             <View style={styles.formGroup}>
                 <Text>Email</Text>
-                <TextInput
-                    style={[
-                        styles.input,
-                        error && !email ? styles.errorInput : null,
-                    ]}
-                    placeholder="Enter your email"
-                    value={email}
-                    onChangeText={setEmail}
-                    keyboardType="email-address"
-                />
+                <TextInput style={[styles.input, error && !email ? styles.errorInput : null]} placeholder="Enter your email" value={email} onChangeText={setEmail} keyboardType="email-address" />
             </View>
 
             <View style={styles.formGroup}>
                 <Text>Password</Text>
-                <TextInput
-                    style={[
-                        styles.input,
-                        error && !password ? styles.errorInput : null,
-                    ]}
-                    placeholder="Enter your password"
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry={true}
-                />
+                <TextInput style={[styles.input, error && !password ? styles.errorInput : null]} placeholder="Enter your password" value={password} onChangeText={setPassword} secureTextEntry={true} />
             </View>
 
             {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
@@ -70,7 +44,13 @@ const LoginPage = () => {
             {/*TEMPORATY BUTTONS*/}
             <Pressable
                 onPress={() => {
-                    AuthenticationSystem.logout();
+                    AuthenticationSystem.logout().then((success) => {
+                        if (success) {
+                            console.log("Successful logout");
+                        } else {
+                            console.log("Failure to logout");
+                        }
+                    });
                 }}
             >
                 <Text>Logout</Text>

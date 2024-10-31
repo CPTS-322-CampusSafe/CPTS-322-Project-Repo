@@ -5,8 +5,11 @@
 const baseAPI_URL = "http://10.0.2.2:8000";
 const authAPI_URL = `${baseAPI_URL}/auth`;
 
-let csrf_token = "";
+let csrfToken = "";
 
+/**
+ * A simple result returned by some authentication methods.
+ */
 type AuthResult = {
     success: boolean;
     message: string;
@@ -42,7 +45,7 @@ export default class AuthenticationSystem {
                     fetch(`${authAPI_URL}/get_csrf_token/`)
                         .then((response) => response.json())
                         .then((json) => {
-                            csrf_token = json.csrfToken;
+                            csrfToken = json.csrfToken;
                             resolve({
                                 success: true,
                                 message: "Successfully logged in.",
@@ -92,19 +95,33 @@ export default class AuthenticationSystem {
             fetch(`${authAPI_URL}/logout/`, {
                 method: "POST",
                 headers: {
-                    "X-CSRFToken": csrf_token,
+                    "X-CSRFToken": csrfToken,
                 },
             })
                 .then((response) => {
                     if (response.ok) {
                         // Success
-                        console.log("Successful logout");
                         resolve(true);
                     } else {
                         // Failure
-                        console.log("Failed logout");
                         resolve(false);
                     }
+                })
+                .catch((error) => {
+                    console.error(error);
+                    reject(); // Got some sort of error
+                });
+        });
+    }
+
+    static getProfile(): Promise<AuthResult> {
+        return new Promise((resolve, reject) => {
+            fetch(`${authAPI_URL}/get_profile/`)
+                .then((response) => {
+                    response.json();
+                })
+                .then((json) => {
+                    console.log(json);
                 })
                 .catch((error) => {
                     console.error(error);

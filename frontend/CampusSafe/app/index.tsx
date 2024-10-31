@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-    TextInput,
-    View,
-    Text,
-    StyleSheet,
-    TouchableOpacity,
-} from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { TextInput, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import LoginPage from "./login";
 
@@ -24,12 +17,7 @@ const ReportsScreen = () => {
 
             {/* Search Bar */}
             <View style={styles.searchContainer}>
-                <TextInput
-                    style={styles.searchInput}
-                    placeholder="Search..."
-                    value={search}
-                    onChangeText={setSearch}
-                />
+                <TextInput style={styles.searchInput} placeholder="Search..." value={search} onChangeText={setSearch} />
             </View>
 
             {/* Box with Border */}

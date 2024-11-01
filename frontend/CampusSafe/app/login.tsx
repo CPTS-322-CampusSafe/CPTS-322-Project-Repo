@@ -11,6 +11,14 @@ const LoginPage = () => {
     const handleLogin = () => {
         if (email === "" || password === "") {
             setError("Both fields are required.");
+            fetch("http://10.221.128.1/auth/get_profile/")
+                .then((response) => response.json())
+                .then((json) => {
+                    console.log(json.movies);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
         } else {
             setError("");
             AuthenticationSystem.login(email, password).then((result) => {
@@ -48,32 +56,27 @@ const LoginPage = () => {
                     AuthenticationSystem.logout().then((success) => {
                         if (success) {
                             Logger.debug("Successful logout");
-                            setError("Successful logout");
                         } else {
                             Logger.debug("Failure to logout");
-                            setError("Failure to logout");
                         }
                     });
                 }}
             >
-                <Text>Logout 7</Text>
+                <Text>Logout</Text>
             </Pressable>
 
             <Pressable
                 onPress={() => {
-                    Logger.debug("Hello you presses this button!!");
                     AuthenticationSystem.isLoggedIn()
                         .then((loggedIn) => {
                             Logger.debug(`Logged in state: ${loggedIn}`);
-                            setError(`Logged in state: ${loggedIn}`);
                         })
                         .catch((error) => {
                             Logger.error(error); // There was an error
-                            setError(`Logged in check failed`);
                         });
                 }}
             >
-                <Text>Is Logged In 1</Text>
+                <Text>Is Logged In</Text>
             </Pressable>
 
             <Pressable
@@ -82,11 +85,10 @@ const LoginPage = () => {
                         Logger.debug(`Email: ${result.data.email}`);
                         Logger.debug(`Username: ${result.data.username}`);
                         Logger.debug(`Phone: ${result.data.phone_number}`);
-                        setError(`Phone: ${result.data.phone_number}`);
                     });
                 }}
             >
-                <Text>Get Profile 5</Text>
+                <Text>Get Profile</Text>
             </Pressable>
         </View>
     );

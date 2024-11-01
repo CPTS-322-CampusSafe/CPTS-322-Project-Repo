@@ -109,5 +109,9 @@ def logout_view(request):
 
 @api_view(["GET"])
 def get_csrf_token(request):
+    """
+    Gets the CSRF token (only used for mobile).
+    """
+
     csrf_token = get_token(request)
     return Response({ 'csrfToken': csrf_token })

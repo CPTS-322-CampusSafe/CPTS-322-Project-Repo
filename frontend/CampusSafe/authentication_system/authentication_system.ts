@@ -1,4 +1,5 @@
 import Logger from "@/logging/logging";
+import * as SecureStore from "expo-secure-store";
 
 /**
  * This base URL should be:
@@ -7,16 +8,25 @@ import Logger from "@/logging/logging";
 const baseAPI_URL = "http://10.0.2.2:8000";
 const authAPI_URL = `${baseAPI_URL}/auth`;
 
-let csrfToken = "";
-
 /**
  * Handles all the authentication operations such as logging in, registering, and logging out.
  */
 export default class AuthenticationSystem {
+    static csrfToken = "";
+
+    static {
+        // Get stored CSRF token if it exists
+        SecureStore.getItemAsync("csrfToken").then((token) => {
+            if (token != null) {
+                AuthenticationSystem.csrfToken = token;
+            }
+        });
+    }
+
     /**
      * Tries to log the user in with the given username and password.
      *
-     * @returns A Promise<string>: a success or error message.
+     * @returns A Promise the holds a success boolean and a message.
      */
     static login(username: string, password: string): Promise<{ success: boolean; message: string }> {
         return new Promise((resolve, reject) => {
@@ -33,13 +43,15 @@ export default class AuthenticationSystem {
             })
                 .then((response) => response.json())
                 .then((json) => {
-                    Logger.debug(json);
-
                     // Get the CSRF token
                     fetch(`${authAPI_URL}/get_csrf_token/`)
                         .then((response) => response.json())
                         .then((json) => {
-                            csrfToken = json.csrfToken;
+                            AuthenticationSystem.csrfToken = json.csrfToken;
+
+                            // Store the token
+                            SecureStore.setItemAsync("csrfToken", AuthenticationSystem.csrfToken);
+
                             resolve({
                                 success: true,
                                 message: "Successfully logged in.",
@@ -89,7 +101,7 @@ export default class AuthenticationSystem {
             fetch(`${authAPI_URL}/logout/`, {
                 method: "POST",
                 headers: {
-                    "X-CSRFToken": csrfToken,
+                    "X-CSRFToken": AuthenticationSystem.csrfToken,
                 },
             })
                 .then((response) => {

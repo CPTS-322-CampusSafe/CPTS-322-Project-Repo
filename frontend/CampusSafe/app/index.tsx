@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { TextInput, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import LoginPage from "./login";
 
 const Tab = createBottomTabNavigator();
 
@@ -50,18 +49,6 @@ export default function Index() {
                     component={ReportsScreen}
                     options={{
                         title: "Reports",
-                        headerTitleStyle: {
-                            fontSize: 20,
-                            height: 30,
-                        },
-                    }}
-                />
-                {/*THIS IS TEMPORARY*/}
-                <Tab.Screen
-                    name="Login"
-                    component={LoginPage}
-                    options={{
-                        title: "Login",
                         headerTitleStyle: {
                             fontSize: 20,
                             height: 30,

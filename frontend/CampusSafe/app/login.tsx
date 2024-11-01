@@ -1,7 +1,7 @@
 import AuthenticationSystem from "@/authentication_system/authentication_system";
 import Logger from "@/logging/logging";
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Pressable } from "react-native";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -11,14 +11,6 @@ const LoginPage = () => {
     const handleLogin = () => {
         if (email === "" || password === "") {
             setError("Both fields are required.");
-            fetch("http://10.221.128.1/auth/get_profile/")
-                .then((response) => response.json())
-                .then((json) => {
-                    console.log(json.movies);
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
         } else {
             setError("");
             AuthenticationSystem.login(email, password).then((result) => {
@@ -49,47 +41,6 @@ const LoginPage = () => {
             <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
                 <Text style={styles.loginBtnText}>Login</Text>
             </TouchableOpacity>
-
-            {/*TEMPORATY BUTTONS*/}
-            <Pressable
-                onPress={() => {
-                    AuthenticationSystem.logout().then((success) => {
-                        if (success) {
-                            Logger.debug("Successful logout");
-                        } else {
-                            Logger.debug("Failure to logout");
-                        }
-                    });
-                }}
-            >
-                <Text>Logout</Text>
-            </Pressable>
-
-            <Pressable
-                onPress={() => {
-                    AuthenticationSystem.isLoggedIn()
-                        .then((loggedIn) => {
-                            Logger.debug(`Logged in state: ${loggedIn}`);
-                        })
-                        .catch((error) => {
-                            Logger.error(error); // There was an error
-                        });
-                }}
-            >
-                <Text>Is Logged In</Text>
-            </Pressable>
-
-            <Pressable
-                onPress={() => {
-                    AuthenticationSystem.getProfile().then((result) => {
-                        Logger.debug(`Email: ${result.data.email}`);
-                        Logger.debug(`Username: ${result.data.username}`);
-                        Logger.debug(`Phone: ${result.data.phone_number}`);
-                    });
-                }}
-            >
-                <Text>Get Profile</Text>
-            </Pressable>
         </View>
     );
 };

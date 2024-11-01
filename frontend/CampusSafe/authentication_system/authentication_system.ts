@@ -8,14 +8,6 @@ const authAPI_URL = `${baseAPI_URL}/auth`;
 let csrfToken = "";
 
 /**
- * A simple result returned by some authentication methods.
- */
-type AuthResult = {
-    success: boolean;
-    message: string;
-};
-
-/**
  * Handles all the authentication operations such as logging in, registering, and logging out.
  */
 export default class AuthenticationSystem {
@@ -24,7 +16,7 @@ export default class AuthenticationSystem {
      *
      * @returns A Promise<string>: a success or error message.
      */
-    static login(username: string, password: string): Promise<AuthResult> {
+    static login(username: string, password: string): Promise<{ success: boolean; message: string }> {
         return new Promise((resolve, reject) => {
             fetch(`${authAPI_URL}/login/`, {
                 method: "POST",
@@ -114,14 +106,24 @@ export default class AuthenticationSystem {
         });
     }
 
-    static getProfile(): Promise<AuthResult> {
+    /**
+     * Tries to get the user's profile.
+     *
+     * @returns A Promise containing information about the user's profile. data will be null if
+     * the request fails.
+     */
+    static getProfile(): Promise<{ success: boolean; data: any }> {
         return new Promise((resolve, reject) => {
             fetch(`${authAPI_URL}/get_profile/`)
                 .then((response) => {
-                    response.json();
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        resolve({ success: false, data: null });
+                    }
                 })
                 .then((json) => {
-                    console.log(json);
+                    resolve({ success: true, data: json });
                 })
                 .catch((error) => {
                     console.error(error);

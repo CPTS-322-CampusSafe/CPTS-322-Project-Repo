@@ -47,23 +47,45 @@ const LoginPage = () => {
                     AuthenticationSystem.logout().then((success) => {
                         if (success) {
                             console.log("Successful logout");
+                            setError("Successful logout");
                         } else {
                             console.log("Failure to logout");
+                            setError("Failure to logout");
                         }
                     });
                 }}
             >
-                <Text>Logout</Text>
+                <Text>Logout 7</Text>
             </Pressable>
 
             <Pressable
                 onPress={() => {
-                    AuthenticationSystem.isLoggedIn().then((loggedIn) => {
-                        console.log(`Logged in state: ${loggedIn}`);
+                    console.log("Hello you pressed this button!!");
+                    AuthenticationSystem.isLoggedIn()
+                        .then((loggedIn) => {
+                            console.log(`Logged in state: ${loggedIn}`);
+                            setError(`Logged in state: ${loggedIn}`);
+                        })
+                        .catch((error) => {
+                            console.error(error); // There was an error
+                            setError(`Logged in check failed`);
+                        });
+                }}
+            >
+                <Text>Is Logged In 1</Text>
+            </Pressable>
+
+            <Pressable
+                onPress={() => {
+                    AuthenticationSystem.getProfile().then((result) => {
+                        console.log(`Email: ${result.data.email}`);
+                        console.log(`Username: ${result.data.username}`);
+                        console.log(`Phone: ${result.data.phone_number}`);
+                        setError(`Phone: ${result.data.phone_number}`);
                     });
                 }}
             >
-                <Text>Is Logged In</Text>
+                <Text>Get Profile 5</Text>
             </Pressable>
         </View>
     );

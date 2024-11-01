@@ -3,7 +3,7 @@ module.exports = {
     plugins: ["prettier"],
     rules: {
         "prettier/prettier": [
-            "warn",
+            "none",
             {
                 endOfLine: "auto",
             },

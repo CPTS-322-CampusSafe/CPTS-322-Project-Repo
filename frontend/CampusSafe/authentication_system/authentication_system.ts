@@ -1,3 +1,5 @@
+import Logger from "@/logging/logging";
+
 /**
  * This base URL should be:
  *  - "http://10.0.2.2:8000" if being run on an Android emulator
@@ -31,7 +33,7 @@ export default class AuthenticationSystem {
             })
                 .then((response) => response.json())
                 .then((json) => {
-                    console.log(json);
+                    Logger.debug(json);
 
                     // Get the CSRF token
                     fetch(`${authAPI_URL}/get_csrf_token/`)
@@ -44,12 +46,12 @@ export default class AuthenticationSystem {
                             });
                         })
                         .catch((error) => {
-                            console.error(error); // There was an error
+                            Logger.error(error); // There was an error
                             reject();
                         });
                 })
                 .catch((error) => {
-                    console.error(error); // There was an error
+                    Logger.error(error); // There was an error
                     reject();
                 });
         });
@@ -71,7 +73,7 @@ export default class AuthenticationSystem {
                     }
                 })
                 .catch((error) => {
-                    console.error(error);
+                    Logger.error(error);
                     reject(); // Got some sort of error
                 });
         });
@@ -100,7 +102,7 @@ export default class AuthenticationSystem {
                     }
                 })
                 .catch((error) => {
-                    console.error(error);
+                    Logger.error(error);
                     reject(); // Got some sort of error
                 });
         });
@@ -126,7 +128,7 @@ export default class AuthenticationSystem {
                     resolve({ success: true, data: json });
                 })
                 .catch((error) => {
-                    console.error(error);
+                    Logger.error(error);
                     reject(); // Got some sort of error
                 });
         });

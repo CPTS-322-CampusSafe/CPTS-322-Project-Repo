@@ -1,4 +1,5 @@
 import AuthenticationSystem from "@/authentication_system/authentication_system";
+import Logger from "@/logging/logging";
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Pressable } from "react-native";
 
@@ -14,7 +15,7 @@ const LoginPage = () => {
             setError("");
             AuthenticationSystem.login(email, password).then((result) => {
                 if (result.success) {
-                    console.log("Login successful!");
+                    Logger.info("Login successful!");
                     // Login was successful, so redirect to home screen here
                 }
             });
@@ -46,10 +47,10 @@ const LoginPage = () => {
                 onPress={() => {
                     AuthenticationSystem.logout().then((success) => {
                         if (success) {
-                            console.log("Successful logout");
+                            Logger.debug("Successful logout");
                             setError("Successful logout");
                         } else {
-                            console.log("Failure to logout");
+                            Logger.debug("Failure to logout");
                             setError("Failure to logout");
                         }
                     });
@@ -60,14 +61,14 @@ const LoginPage = () => {
 
             <Pressable
                 onPress={() => {
-                    console.log("Hello you pressed this button!!");
+                    Logger.debug("Hello you presses this button!!");
                     AuthenticationSystem.isLoggedIn()
                         .then((loggedIn) => {
-                            console.log(`Logged in state: ${loggedIn}`);
+                            Logger.debug(`Logged in state: ${loggedIn}`);
                             setError(`Logged in state: ${loggedIn}`);
                         })
                         .catch((error) => {
-                            console.error(error); // There was an error
+                            Logger.error(error); // There was an error
                             setError(`Logged in check failed`);
                         });
                 }}
@@ -78,9 +79,9 @@ const LoginPage = () => {
             <Pressable
                 onPress={() => {
                     AuthenticationSystem.getProfile().then((result) => {
-                        console.log(`Email: ${result.data.email}`);
-                        console.log(`Username: ${result.data.username}`);
-                        console.log(`Phone: ${result.data.phone_number}`);
+                        Logger.debug(`Email: ${result.data.email}`);
+                        Logger.debug(`Username: ${result.data.username}`);
+                        Logger.debug(`Phone: ${result.data.phone_number}`);
                         setError(`Phone: ${result.data.phone_number}`);
                     });
                 }}

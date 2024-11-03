@@ -145,4 +145,40 @@ export default class AuthenticationSystem {
                 });
         });
     }
+
+    static register(username: string, email: string, password: string, phoneNumber: string): Promise<{ success: boolean; message: any }> {
+        let success = false;
+
+        return new Promise((resolve, reject) => {
+            fetch(`${authAPI_URL}/register/`, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    user_data: {
+                        username: username,
+                        email: email,
+                        password: password,
+                    },
+                    phone_number: phoneNumber,
+                }),
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        success = true;
+                    }
+
+                    return response.json();
+                })
+                .then((json) => {
+                    resolve({ success: success, message: json });
+                })
+                .catch((error) => {
+                    Logger.error(error); // There was an error
+                    reject();
+                });
+        });
+    }
 }

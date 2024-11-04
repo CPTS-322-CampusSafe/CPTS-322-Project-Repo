@@ -11,10 +11,17 @@ Needed tools: npm, npx, and Python
 Run these commands:
 
 1. `cd frontend/CampusSafe`
-2. `npm install`
+2. `npm install`, to install the necessary dependencies
 3. `npx expo start`
+   - Note: may be a different command for MacOS or Linux
 4. Install Expo Go on device
-5. Scan QR code with Expo Go
+   - XCode will need to be install on your development device to build for iOS
+5. Scan QR code with Expo Go app
+
+Additional Commands:
+
+1. Run `npx expo lint` to run the linter (ESLint and Prettier) to find issues in the project
+   - May want to install the Prettier and/or ESLint VSCode extentions for a better development experience
 
 ## Backend
 
@@ -32,3 +39,14 @@ Run these commands:
 7. Migrations will need to be run to create the database with: `python manage.py migrate`
 
 Additionally, run `pip freeze > requirements.txt` in the `backend` folder to add any newly installed libaries (via pip) to the requirements file.
+
+## Running the Frontend with the Backend
+
+Here are some additional notes for running the front end and back end together:
+
+1. The `baseAPI_URL` constant in `authentication_system.ts` may need to be changed depending on what device you are running on:
+   - If running a local development server:
+     - Change to: "http://10.0.2.2:8000" if running frondend on an Android emulator
+     - Change to your private IP address if running frontend on a physical device
+   - If running on a production server:
+     - Change to the domain of the server (https://www.example.com)

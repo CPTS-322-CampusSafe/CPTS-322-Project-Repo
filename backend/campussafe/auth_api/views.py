@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from .serializers import UserSerializer
 from .models import Profile, UserSettings
 from phonenumber_field.validators import validate_international_phonenumber
+from django.middleware.csrf import get_token
 
 @api_view(["POST"])
 def register_view(request):
@@ -105,3 +106,12 @@ def logout_view(request):
 
     logout(request)
     return Response()
+
+@api_view(["GET"])
+def get_csrf_token(request):
+    """
+    Gets the CSRF token (only used for mobile).
+    """
+
+    csrf_token = get_token(request)
+    return Response({ 'csrfToken': csrf_token })

@@ -46,7 +46,7 @@ Here are some additional notes for running the front end and back end together:
 
 1. The `baseAPI_URL` constant in `authentication_system.ts` may need to be changed depending on what device you are running on:
    - If running a local development server:
-     - Change to: "http://10.0.2.2:8000" if running frondend on an Android emulator
+     - Change to: "http://10.0.2.2:8000" if running frontend on an Android emulator
      - Change to your private IP address if running frontend on a physical device
    - If running on a production server:
      - Change to the domain of the server (https://www.example.com)

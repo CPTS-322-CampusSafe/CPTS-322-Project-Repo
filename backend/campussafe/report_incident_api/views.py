@@ -6,6 +6,7 @@ from .serializers import IncidentReportSerializer
 from rest_framework import status
 from django.db.models.functions import Now
 from django.contrib.auth import get_user_model
+from utils.utils import is_int
 
 NEED_ADMIN_APPROVAL = False # This should be changed when the admin review feature is added
 
@@ -39,10 +40,20 @@ def get_reports(request):
     Gets the most recient incident reports.
     """
 
-    reports = {}
+    page_size = request.query_params.get("page_size")
+    page_number = request.query_params.get("page_number")
+
+    if is_int(page_size) and is_int(page_number.isdigit()):
+        page_size = int(page_size)
+        page_number = int(page_number)
+    else:
+        page_size = 10
+        page_number = 0
+
+    start_index = page_number * page_size
 
     # Get only verified reports sorted in order from newest to oldest
-    reports = IncidentReport.objects.filter(is_verified=True).order_by("-recieved_at")[:10]
+    reports = IncidentReport.objects.filter(is_verified=True).order_by("-recieved_at")[start_index:(start_index + page_size)]
 
     serializer = IncidentReportSerializer(reports, many=True)
     return Response(serializer.data)

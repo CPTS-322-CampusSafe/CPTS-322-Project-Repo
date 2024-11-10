@@ -40,13 +40,22 @@ Run these commands:
 
 Additionally, run `pip freeze > requirements.txt` in the `backend` folder to add any newly installed libaries (via pip) to the requirements file.
 
+Also, to build/rebuild a Docker image run `docker build -t campus-safe .` in the `backend` directory.
+
 ## Running the Frontend with the Backend
 
 Here are some additional notes for running the front end and back end together:
 
 1. The `baseAPI_URL` constant in `authentication_system.ts` may need to be changed depending on what device you are running on:
+
    - If running a local development server:
-     - Change to: "http://10.0.2.2:8000" if running frondend on an Android emulator
+     - Change to: "http://10.0.2.2:8000" if running frontend on an Android emulator
      - Change to your private IP address if running frontend on a physical device
    - If running on a production server:
      - Change to the domain of the server (https://www.example.com)
+
+2. The backend server can be run as a Docker container by using the following commands:
+
+   - `docker run -p 8000:8000 -d josephbuchholz/campus-safe`
+   - Run `docker logs --follow <container_id>` to view the logs
+   - Run `docker stop <container_id>` to stop the server

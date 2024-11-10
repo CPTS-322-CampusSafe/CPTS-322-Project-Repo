@@ -145,4 +145,97 @@ export default class AuthenticationSystem {
                 });
         });
     }
+
+    /**
+     * Tries to create a new account for the user with the given information.
+     *
+     * @returns A Promise the holds a success boolean and a message containing any errors.
+     */
+    static register(username: string, email: string, password: string, phoneNumber: string): Promise<{ success: boolean; message: Record<string, string[]> }> {
+        let success = false;
+        let message: Record<string, string[]> = { username: [], password: [], email: [], phoneNumber: [], main: [] };
+        let foundError = false;
+
+        // Make sure the fields are not empty:
+        if (username === "") {
+            message.username.push("The field may not be blank");
+            foundError = true;
+        }
+
+        if (password === "") {
+            message.password.push("The field may not be blank");
+            foundError = true;
+        }
+
+        if (email === "") {
+            message.email.push("The field may not be blank");
+            foundError = true;
+        }
+
+        if (phoneNumber === "") {
+            message.phoneNumber.push("The field may not be blank");
+            foundError = true;
+        }
+
+        // Early exit
+        if (foundError) {
+            return new Promise((resolve) => {
+                resolve({ success: success, message: message });
+            });
+        }
+
+        // Make request to server:
+        return new Promise((resolve, reject) => {
+            fetch(`${authAPI_URL}/register/`, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    user_data: {
+                        username: username,
+                        email: email,
+                        password: password,
+                    },
+                    phone_number: phoneNumber,
+                }),
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        success = true;
+                    }
+
+                    return response.json();
+                })
+                .then((json) => {
+                    // Check for errors:
+                    if (Array.isArray(json.username)) {
+                        message.username = json.username;
+                    }
+
+                    if (Array.isArray(json.password)) {
+                        message.password = json.password;
+                    }
+
+                    if (Array.isArray(json.email)) {
+                        message.email = json.email;
+                    }
+
+                    if (Array.isArray(json.phone_number)) {
+                        message.phoneNumber = json.phone_number;
+                    }
+
+                    if (json.user_data) {
+                        message.main.push("Missing some fields.");
+                    }
+
+                    resolve({ success: success, message: message });
+                })
+                .catch((error) => {
+                    Logger.error(error); // There was an error
+                    reject();
+                });
+        });
+    }
 }

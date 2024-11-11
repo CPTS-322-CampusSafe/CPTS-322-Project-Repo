@@ -8,5 +8,6 @@ module.exports = {
                 endOfLine: "auto",
             },
         ],
+        "import/no-unresolved": [0, { caseSensitive: false }],
     },
 };

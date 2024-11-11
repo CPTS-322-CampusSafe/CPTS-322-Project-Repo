@@ -2,6 +2,10 @@ from django.db import models
 import auth_api.models
 
 class IncidentReport(models.Model):
+    """
+    An incident report with info such as title, description, and location.
+    """
+
     title = models.CharField(max_length=150)
     summary = models.CharField(max_length=300)
     description = models.TextField()
@@ -23,5 +27,9 @@ class IncidentReport(models.Model):
     user = models.ForeignKey(auth_api.models.User, on_delete=models.SET_NULL, null=True)
 
 class ReportImage(models.Model):
+    """
+    An image contained within an incident report.
+    """
+
     image = models.ImageField(upload_to="images/")
     incident_report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)

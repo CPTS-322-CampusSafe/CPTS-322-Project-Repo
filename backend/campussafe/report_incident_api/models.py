@@ -7,18 +7,18 @@ class IncidentReport(models.Model):
     """
 
     title = models.CharField(max_length=150)
-    summary = models.CharField(max_length=300)
-    description = models.TextField()
+    summary = models.CharField(max_length=300, blank=True)
+    description = models.TextField(blank=True)
     is_verified = models.BooleanField(default=False)
     is_resolved = models.BooleanField(default=False)
 
     recieved_at = models.DateTimeField(auto_now_add=True) # The time this report was recieved by the server
     updated_at = models.DateTimeField(auto_now=True) # The time this report was updated by the server
-    verified_at = models.DateTimeField(null=True) # The time this report was verified by an admin
-    happened_at = models.DateTimeField(null=True) # The time that this incident actually happened
-    resolved_at = models.DateTimeField(null=True) # The time this report was marked as resolved
+    verified_at = models.DateTimeField(blank=True, null=True) # The time this report was verified by an admin
+    happened_at = models.DateTimeField(blank=True, null=True) # The time that this incident actually happened
+    resolved_at = models.DateTimeField(blank=True, null=True) # The time this report was marked as resolved
 
-    location = models.CharField(max_length=100, default="")
+    location = models.CharField(max_length=100, blank=True, default="")
 
     # 0-5: non emergencies
     # 5-10: emergencies (should send notification)

@@ -1,5 +1,8 @@
 from django.db import models
 import auth_api.models
+from .notifier import on_incident_report_verified
+from django.db.models.functions import Now
+from django.db.models.signals import post_save, post_init
 
 class IncidentReport(models.Model):
     """
@@ -25,6 +28,23 @@ class IncidentReport(models.Model):
     emergency_level = models.IntegerField(null=True)
 
     user = models.ForeignKey(auth_api.models.User, on_delete=models.SET_NULL, null=True)
+
+    previous_is_verified = None
+
+    # help from this awnser: https://stackoverflow.com/a/25503326
+    @staticmethod
+    def post_save(sender, instance, created, **kwargs):
+        if instance.previous_is_verified != instance.is_verified or created:
+            if instance.is_verified:
+                instance.verified_at = Now()
+                on_incident_report_verified(instance)
+
+    @staticmethod
+    def remember_state(sender, instance, **kwargs):
+        instance.previous_is_verified = instance.is_verified
+
+post_save.connect(IncidentReport.post_save, sender=IncidentReport)
+post_init.connect(IncidentReport.remember_state, sender=IncidentReport)
 
 class ReportImage(models.Model):
     """

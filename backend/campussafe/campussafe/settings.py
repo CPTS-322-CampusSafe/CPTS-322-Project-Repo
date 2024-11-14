@@ -28,7 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"] # allow all hosts
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -137,3 +136,5 @@ PHONENUMBER_DEFAULT_REGION = "US"
 # Where files will be stored
 MEDIA_ROOT = os.path.join(BASE_DIR, 'files')
 MEDIA_URL = '/files/'
+
+SMS_BACKEND = "sms.backends.console.SmsBackend"

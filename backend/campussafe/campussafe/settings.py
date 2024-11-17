@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -137,4 +141,21 @@ PHONENUMBER_DEFAULT_REGION = "US"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'files')
 MEDIA_URL = '/files/'
 
+FAKE_NOTIFICATIONS = False
+
 SMS_BACKEND = "sms.backends.console.SmsBackend"
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+if FAKE_NOTIFICATIONS:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" # used for debugging
+
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+EMAIL_FROM = env("EMAIL_HOST_USER")
+if FAKE_NOTIFICATIONS:
+    EMAIL_FROM = "debug@email.com"

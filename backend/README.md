@@ -1,27 +1,6 @@
-# CampusSafe
+# The Backend for CampusSafe
 
-A cross-platform mobile application that provides features for notifying college students about various emergencies.
-
-# Build and Run
-
-Needed tools: npm, npx, and Python
-
-## Frontend
-
-Run these commands:
-
-1. `cd frontend/CampusSafe`
-2. `npm install`, to install the necessary dependencies
-3. `npx expo start`
-   - Note: may be a different command for MacOS or Linux
-4. Install Expo Go on device
-   - XCode will need to be install on your development device to build for iOS
-5. Scan QR code with Expo Go app
-
-Additional Commands:
-
-1. Run `npx expo lint` to run the linter (ESLint and Prettier) to find issues in the project
-   - May want to install the Prettier and/or ESLint VSCode extentions for a better development experience
+Needed tools: Python
 
 ## Backend
 
@@ -40,7 +19,15 @@ Run these commands:
 
 Additionally, run `pip freeze > requirements.txt` in the `backend` folder to add any newly installed libaries (via pip) to the requirements file.
 
-[See more information about the backend.](backend/campussafe/README.md)
+Also, to build/rebuild a Docker image run `docker build -t campus-safe .` in the `backend` directory.
+
+# Enabling Email Notifications
+
+For debugging purposes a console backend can be used for email notifications (printing to the console instead of actually sending emails): To
+enable this set `FAKE_NOTIFICATIONS` to `True` in `campussafe/campussafe/settings.py`.
+
+Otherwise for real email notifications set `FAKE_NOTIFICATIONS` to `False` and create an `.env` file in the `campussafe/campussafe` directory containing values
+for `EMAIL_HOST_USER` and `EMAIL_HOST_PASSWORD`.
 
 ## Running the Frontend with the Backend
 

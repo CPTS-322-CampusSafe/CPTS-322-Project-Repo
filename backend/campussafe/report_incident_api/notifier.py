@@ -1,5 +1,7 @@
 from sms import send_sms
 from auth_api.models import User, UserSettings
+from django.core.mail import send_mail
+from django.conf import settings as django_settings
 
 def send_sms_notification(message):
     """
@@ -23,12 +25,32 @@ def send_sms_notification(message):
         if num < len(phone_numbers):
             print("Failed to send message to " + str(len(phone_numbers) - num) + " phone numbers.")
 
-def send_email_notification(message):
+def send_email_notification(subject, message):
     """
     Sends a message via email to users who have opted in for email notifications.
     """
 
-    pass
+    user_settings = UserSettings.objects.filter(recieve_email_notifications=True)
+
+    emails = []
+    for settings in user_settings:
+        emails.append(settings.profile.user.email)
+
+    if len(emails) != 0:
+        num = 0
+        for email in emails:
+            print("Sending email to: ", email)
+
+            num += send_mail(
+                subject,
+                message,
+                django_settings.EMAIL_FROM,
+                [email],
+                fail_silently=False,
+            )
+        
+        if num < len(emails):
+            print("Failed to email message to " + str(len(emails) - num) + " emails.")
 
 def on_incident_report_verified(report):
     """
@@ -37,7 +59,10 @@ def on_incident_report_verified(report):
 
     if report.emergency_level != None and report.emergency_level >= 5:
         sms_message = report.title + ": " + report.summary
-        email_message = report.title + ": " + report.summary + ". " + report.description
 
         send_sms_notification(sms_message)
-        send_email_notification(email_message)
+
+        email_subject = report.title
+        email_message = report.summary + ": " + report.description
+
+        send_email_notification(email_subject, email_message)

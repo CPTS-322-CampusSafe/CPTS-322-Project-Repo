@@ -1,4 +1,4 @@
-import AuthenticationSystem from "@/authentication_system/authentication_system";
+import AuthenticationSystem from "@/backend_apis/authentication_system/authentication_system";
 import Logger from "@/logging/logging";
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";

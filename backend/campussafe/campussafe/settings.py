@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'auth_api.apps.AuthApiConfig',
+    'report_incident_api.apps.ReportIncidentApiConfig',
     'phonenumber_field', # for the django-phonenumber-field library
     'rest_framework', # for the django-rest-framework
     'nested_admin', # for the django-nested-admin library
@@ -129,5 +131,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Make Django's authentication system use a custom user model
 AUTH_USER_MODEL = "auth_api.User"
 
-# default region for interpreting phone numbers (United States)
+# Default region for interpreting phone numbers (United States)
 PHONENUMBER_DEFAULT_REGION = "US"
+
+# Where files will be stored
+MEDIA_ROOT = os.path.join(BASE_DIR, 'files')
+MEDIA_URL = '/files/'

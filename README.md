@@ -40,7 +40,7 @@ Run these commands:
 
 Additionally, run `pip freeze > requirements.txt` in the `backend` folder to add any newly installed libaries (via pip) to the requirements file.
 
-[See more information about the backend.](backend/campussafe/README.md)
+[See more information about the backend.](backend/README.md)
 
 ## Running the Frontend with the Backend
 

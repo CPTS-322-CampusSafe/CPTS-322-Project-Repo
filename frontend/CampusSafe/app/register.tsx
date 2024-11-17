@@ -1,6 +1,7 @@
 import AuthenticationSystem from "@/backend_apis/authentication_system/authentication_system";
 import React, { useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
+import { useRouter } from 'expo-router';
 
 // The minimum length for the user's password
 const minimumPasswordLength = 8;
@@ -14,6 +15,7 @@ export default function RegisterScreen() {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const router = useRouter();
 
     const noErrorObject: Record<string, string[]> = { username: [], password: [], email: [], phoneNumber: [], main: [] };
     const [error, setError] = useState(noErrorObject);
@@ -39,6 +41,7 @@ export default function RegisterScreen() {
             if (result.success) {
                 Alert.alert("Registration successful!");
                 // Redirect to login screen here
+                router.push('/');
             } else {
                 setError(result.message);
             }

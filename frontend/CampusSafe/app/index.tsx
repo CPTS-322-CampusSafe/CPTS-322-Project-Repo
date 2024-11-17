@@ -1,133 +1,123 @@
+import AuthenticationSystem from "@/authentication_system/authentication_system";
+import Logger from "@/logging/logging";
 import React, { useState } from "react";
-import { TextInput, View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Pressable } from "react-native";
+import { useRouter } from 'expo-router';
 
-const Tab = createBottomTabNavigator();
+const LoginPage = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+    const router = useRouter();
 
-const ReportsScreen = () => {
-    const [search, setSearch] = useState("");
+    const handleLogin = () => {
+        if (email === "" || password === "") {
+            setError("Both fields are required.");
+        } else {
+            setError("");
+            AuthenticationSystem.login(email, password).then((result) => {
+                if (result.success) {
+                    Logger.info("Login successful!");
+                    router.push('/home'); // Navigate to home page on success
+                } else {
+                    setError("Invalid login credentials.");
+                }
+            }).catch(err => {
+                Logger.error("Login failed: " + err.message);
+                setError("An error occurred while logging in.");
+            });
+        }
+    };
+
+    const handleRegister = () => {
+        router.push('/register');
+    };
 
     return (
-        <View style={{ flex: 1 }}>
-            {/* Create Report Button */}
-            <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}>Create Report</Text>
-            </TouchableOpacity>
+        <View style={styles.loginContainer}>
+            <Text style={styles.title}>Login</Text>
 
-            {/* Search Bar */}
-            <View style={styles.searchContainer}>
-                <TextInput style={styles.searchInput} placeholder="Search..." value={search} onChangeText={setSearch} />
+            <View style={styles.formGroup}>
+                <Text>Email</Text>
+                <TextInput style={[styles.input, error && !email ? styles.errorInput : null]} placeholder="Enter your email" value={email} onChangeText={setEmail} keyboardType="email-address" />
             </View>
 
-            {/* Box with Border */}
-            <View style={styles.boxContainer}>
-                <Text>Display Reports</Text>
+            <View style={styles.formGroup}>
+                <Text>Password</Text>
+                <TextInput style={[styles.input, error && !password ? styles.errorInput : null]} placeholder="Enter your password" value={password} onChangeText={setPassword} secureTextEntry={true} />
+            </View>
+
+            {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
+
+            <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
+                <Text style={styles.loginBtnText}>Login</Text>
+            </TouchableOpacity>
+
+            <View style={styles.footerText}>
+                <Text style={styles.dontHaveAccountText}>Don’t have an account? </Text>
+                <Pressable onPress={handleRegister}>
+                    <Text style={styles.registerText}>Sign up</Text>
+                </Pressable>
             </View>
         </View>
     );
 };
 
-const ResourcesScreen = () => (
-    <View style={styles.screen}>
-        <Text>No Resources Available</Text>
-    </View>
-);
-
-const ProfileScreen = () => (
-    <View style={styles.screen}>
-        <Text>No Profile Information</Text>
-    </View>
-);
-
-export default function Index() {
-    return (
-        <View style={{ flex: 1 }}>
-            <Tab.Navigator>
-                {/* navigates between screens */}
-                <Tab.Screen
-                    name="Reports"
-                    component={ReportsScreen}
-                    options={{
-                        title: "Reports",
-                        headerTitleStyle: {
-                            fontSize: 20,
-                            height: 30,
-                        },
-                    }}
-                />
-                <Tab.Screen
-                    name="Resources"
-                    component={ResourcesScreen}
-                    options={{
-                        title: "Resources",
-                        headerTitleStyle: {
-                            fontSize: 20,
-                        },
-                    }}
-                />
-                <Tab.Screen
-                    name="Profile"
-                    component={ProfileScreen}
-                    options={{
-                        title: "Profile",
-                        headerTitleStyle: {
-                            fontSize: 20,
-                        },
-                    }}
-                />
-            </Tab.Navigator>
-        </View>
-    );
-}
 const styles = StyleSheet.create({
-    button: {
-        width: 140,
-        height: 34,
-        position: "absolute",
-        top: 20, // Position it near the top
-        right: 20, // Align to the right side
-        backgroundColor: "#990000", // Button color
-        padding: 5,
-        borderRadius: 5,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    buttonText: {
-        color: "#fff", // Text color for the button
-        fontSize: 16,
-        fontWeight: "bold",
-    },
-    searchContainer: {
-        position: "absolute",
-        top: 70, // Adjust position to match the new title position
-        left: "45%",
-        transform: [{ translateX: -150 }], // Center the input
-        width: 335,
-    },
-    searchInput: {
-        height: 40,
+    loginContainer: {
+        width: "80%",
+        margin: "auto",
+        padding: 20,
+        borderWidth: 1,
         borderColor: "#ccc",
-        borderWidth: 1,
-        borderRadius: 10,
-        paddingHorizontal: 10,
-        backgroundColor: "#fff",
+        borderRadius: 8,
     },
-    boxContainer: {
-        position: "absolute",
-        top: 130, // Adjust position below the search bar
-        left: "45%",
-        transform: [{ translateX: -150 }], // Center the box horizontally
-        width: 335,
-        height: 490, // Set the height of the box
-        borderWidth: 1,
-        borderColor: "#808080", // Border color (black)
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#f9f9f9", // Background color of the box
+    title: {
+        textAlign: "center",
+        marginBottom: 20,
+        fontSize: 24,
     },
-    screen: {
-        flex: 1,
-        justifyContent: "center",
+    formGroup: {
+        marginBottom: 15,
+    },
+    input: {
+        width: "100%",
+        padding: 10,
+        marginVertical: 5,
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 4,
+    },
+    errorInput: {
+        borderColor: "red",
+    },
+    errorMessage: {
+        color: "red",
+        fontSize: 12,
+        marginBottom: 10,
+    },
+    loginBtn: {
+        backgroundColor: "#4CAF50",
+        padding: 10,
+        borderRadius: 4,
         alignItems: "center",
+    },
+    loginBtnText: {
+        color: "#fff",
+        fontSize: 16,
+    },
+    footerText: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: 20,
+    },
+   dontHaveAccountText: {
+        fontSize: 16,
+    },
+    registerText: {
+        color: "blue",
+        fontSize: 16,
     },
 });
+
+export default LoginPage;

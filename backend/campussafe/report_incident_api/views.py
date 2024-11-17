@@ -4,9 +4,8 @@ from rest_framework.response import Response
 from .models import IncidentReport, ReportImage
 from .serializers import IncidentReportSerializer
 from rest_framework import status
-from django.db.models.functions import Now
-from django.contrib.auth import get_user_model
 from utils.utils import is_int
+from .notifier import on_incident_report_verified
 
 NEED_ADMIN_APPROVAL = False # This should be changed when the admin review feature is added
 DEFAULT_PAGE_SIZE = 10
@@ -24,14 +23,13 @@ def report_incident(request):
     serializer = IncidentReportSerializer(data=request.data)
     if serializer.is_valid():
         is_verified = False
-        verified_at = None
 
         if user:
             if not NEED_ADMIN_APPROVAL or user.profile.is_user_admin:
                 is_verified = True
-                verified_at = Now()
 
-        serializer.save(user=user, is_verified=is_verified, verified_at=verified_at)
+        serializer.save(user=user, is_verified=is_verified)
+
         return Response("Success!", status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

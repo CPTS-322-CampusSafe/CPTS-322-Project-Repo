@@ -1,4 +1,4 @@
-import AuthenticationSystem from "@/authentication_system/authentication_system";
+import AuthenticationSystem from "@/backend_apis/authentication_system/authentication_system";
 import Logger from "@/logging/logging";
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Pressable } from "react-native";
@@ -11,22 +11,7 @@ const LoginPage = () => {
     const router = useRouter();
 
     const handleLogin = () => {
-        if (email === "" || password === "") {
-            setError("Both fields are required.");
-        } else {
-            setError("");
-            AuthenticationSystem.login(email, password).then((result) => {
-                if (result.success) {
-                    Logger.info("Login successful!");
-                    router.push('/home'); // Navigate to home page on success
-                } else {
-                    setError("Invalid login credentials.");
-                }
-            }).catch(err => {
-                Logger.error("Login failed: " + err.message);
-                setError("An error occurred while logging in.");
-            });
-        }
+        router.push('/home');
     };
 
     const handleRegister = () => {

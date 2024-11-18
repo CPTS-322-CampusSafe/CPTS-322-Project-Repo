@@ -1,16 +1,21 @@
 import React, { useState } from "react";
 import { TextInput, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useRouter } from 'expo-router';
 
 const Tab = createBottomTabNavigator();
 
 const ReportsScreen = () => {
     const [search, setSearch] = useState("");
+    const router = useRouter();
 
+    const handleCreateReport = () => {
+        router.push("/create_report");
+    };
     return (
         <View style={{ flex: 1 }}>
             {/* Create Report Button */}
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={handleCreateReport}>
                 <Text style={styles.buttonText}>Create Report</Text>
             </TouchableOpacity>
 

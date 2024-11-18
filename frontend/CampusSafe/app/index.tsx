@@ -1,8 +1,12 @@
-import AuthenticationSystem from "@/backend_apis/authentication_system/authentication_system";
-import Logger from "@/logging/logging";
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Pressable } from "react-native";
-import { useRouter } from 'expo-router';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { useRouter } from "expo-router";
+import AuthenticationSystem from "@/backend_apis/authentication_system/authentication_system";
+import Logger from "@/logging/logging";
+import HomePage from "./home"; // Example import for home page
+import RegisterPage from "./register"; // Example import for register page
+import Profile from "./profile"; // Import the Profile component
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -15,22 +19,24 @@ const LoginPage = () => {
             setError("Both fields are required.");
         } else {
             setError("");
-            AuthenticationSystem.login(email, password).then((result) => {
-                if (result.success) {
-                    Logger.info("Login successful!");
-                    router.push('/home'); // Navigate to home page on success
-                } else {
-                    setError("Invalid login credentials.");
-                }
-            }).catch(err => {
-                Logger.error("Login failed: " + err.message);
-                setError("An error occurred while logging in.");
-            });
+            AuthenticationSystem.login(email, password)
+                .then((result) => {
+                    if (result.success) {
+                        Logger.info("Login successful!");
+                        router.push("/home"); // Navigate to home page on success
+                    } else {
+                        setError("Invalid login credentials.");
+                    }
+                })
+                .catch((err) => {
+                    Logger.error("Login failed: " + err.message);
+                    setError("An error occurred while logging in.");
+                });
         }
     };
 
     const handleRegister = () => {
-        router.push('/register');
+        router.push("/register");
     };
 
     return (
@@ -39,12 +45,24 @@ const LoginPage = () => {
 
             <View style={styles.formGroup}>
                 <Text>Email</Text>
-                <TextInput style={[styles.input, error && !email ? styles.errorInput : null]} placeholder="Enter your email" value={email} onChangeText={setEmail} keyboardType="email-address" />
+                <TextInput
+                    style={[styles.input, error && !email ? styles.errorInput : null]}
+                    placeholder="Enter your email"
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                />
             </View>
 
             <View style={styles.formGroup}>
                 <Text>Password</Text>
-                <TextInput style={[styles.input, error && !password ? styles.errorInput : null]} placeholder="Enter your password" value={password} onChangeText={setPassword} secureTextEntry={true} />
+                <TextInput
+                    style={[styles.input, error && !password ? styles.errorInput : null]}
+                    placeholder="Enter your password"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry={true}
+                />
             </View>
 
             {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
@@ -60,6 +78,19 @@ const LoginPage = () => {
                 </Pressable>
             </View>
         </View>
+    );
+};
+
+const App = () => {
+    return (
+        <Router>
+            <Switch>
+                <Route path="/" exact component={LoginPage} />
+                <Route path="/home" component={HomePage} />
+                <Route path="/register" component={RegisterPage} />
+                <Route path="/profile/:userId" component={Profile} /> {/* Add the Profile route */}
+            </Switch>
+        </Router>
     );
 };
 
@@ -107,11 +138,11 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     footerText: {
-        flexDirection: 'row',
-        justifyContent: 'center',
+        flexDirection: "row",
+        justifyContent: "center",
         marginTop: 20,
     },
-   dontHaveAccountText: {
+    dontHaveAccountText: {
         fontSize: 16,
     },
     registerText: {
@@ -120,4 +151,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default LoginPage;
+export default App;

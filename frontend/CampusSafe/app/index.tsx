@@ -11,7 +11,23 @@ const LoginPage = () => {
     const router = useRouter();
 
     const handleLogin = () => {
-        router.push('/home');
+         if (email === "" || password === "") {
+             setError("Both fields are required.");
+             } else {
+                 setError("");
+                 AuthenticationSystem.login(email, password).then((result) => {
+                     if (result.success) {
+                        Logger.info("Login successful!");
+                        router.push('/home'); // Navigate to home page on success
+                     } else {
+                        setError("Invalid login credentials.");
+                     }
+                 }).catch(err => {
+                     Logger.error("Login failed: " + err.message);
+                     setError("An error occurred while logging in.");
+                 });
+             }
+         }
     };
 
     const handleRegister = () => {

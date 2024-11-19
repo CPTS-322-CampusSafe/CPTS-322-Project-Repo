@@ -11,10 +11,23 @@ export default class AuthenticationSystem {
     static {
         // Get stored CSRF token if it exists
         SecureStore.getItemAsync("csrfToken").then((token) => {
-            if (token != null) {
+            if (token != null && token !== "") {
                 AuthenticationSystem.csrfToken = token;
             }
         });
+
+        // Get the CSRF token
+        fetch(`${authAPI_URL}/get_csrf_token/`)
+            .then((response) => response.json())
+            .then((json) => {
+                AuthenticationSystem.csrfToken = json.csrfToken;
+
+                // Store the token
+                SecureStore.setItemAsync("csrfToken", AuthenticationSystem.csrfToken);
+            })
+            .catch((error) => {
+                Logger.error(error); // There was an error
+            });
     }
 
     /**
@@ -72,6 +85,8 @@ export default class AuthenticationSystem {
         return new Promise((resolve, reject) => {
             fetch(`${authAPI_URL}/is_logged_in/`)
                 .then((response) => {
+                    SecureStore.setItemAsync("csrfToken", "");
+
                     if (response.ok) {
                         resolve(true); // Is logged in
                     } else {

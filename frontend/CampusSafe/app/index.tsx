@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Pressable } from "react-native";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { useRouter } from "expo-router";
 import AuthenticationSystem from "@/backend_apis/authentication_system/authentication_system";
 import Logger from "@/logging/logging";
-import LoadingSpinner from "@/components/loading_spinner";
-import HomePage from "./home";
-import RegisterPage from "./register";
-import Profile from "./profile";
 
 const StartScreen = () => {
     const router = useRouter();
@@ -24,7 +19,7 @@ const StartScreen = () => {
                 .then((result) => {
                     if (result.success) {
                         Logger.info("Login successful!");
-                        router.push("/home");
+                        router.push("/home"); // Navigate to the home screen on success
                     } else {
                         setError("Invalid login credentials.");
                     }
@@ -37,40 +32,41 @@ const StartScreen = () => {
     };
 
     const handleRegister = () => {
-        router.push("/register");
+        router.push("/register"); // Navigate to the register screen
     };
 
     useEffect(() => {
         AuthenticationSystem.isLoggedIn().then((result) => {
             if (result) {
-                router.push("/home");
-            } 
+                router.push("/home"); // Redirect to home if already logged in
+            }
         });
     }, []);
 
     return (
-        <View style={styles.loginContainer}>
+        <View style={styles.container}>
             <Text style={styles.title}>Login</Text>
 
             <View style={styles.formGroup}>
-                <Text>Email</Text>
+                <Text style={styles.label}>Email</Text>
                 <TextInput
                     style={[styles.input, error && !email ? styles.errorInput : null]}
                     placeholder="Enter your email"
                     value={email}
                     onChangeText={setEmail}
                     keyboardType="email-address"
+                    autoCapitalize="none"
                 />
             </View>
 
             <View style={styles.formGroup}>
-                <Text>Password</Text>
+                <Text style={styles.label}>Password</Text>
                 <TextInput
                     style={[styles.input, error && !password ? styles.errorInput : null]}
                     placeholder="Enter your password"
                     value={password}
                     onChangeText={setPassword}
-                    secureTextEntry={true}
+                    secureTextEntry
                 />
             </View>
 
@@ -90,61 +86,53 @@ const StartScreen = () => {
     );
 };
 
-const App = () => {
-    return (
-        <Router>
-            <Switch>
-                <Route path="/" exact component={StartScreen} />
-                <Route path="/home" component={HomePage} />
-                <Route path="/register" component={RegisterPage} />
-                <Route path="/profile/:userId" component={Profile} />
-            </Switch>
-        </Router>
-    );
-};
+export default StartScreen;
 
 const styles = StyleSheet.create({
-    loginContainer: {
-        width: "80%",
-        margin: "auto",
+    container: {
+        flex: 1,
+        justifyContent: "center",
         padding: 20,
-        borderWidth: 1,
-        borderColor: "#ccc",
-        borderRadius: 8,
+        backgroundColor: "#fff",
     },
     title: {
-        textAlign: "center",
-        marginBottom: 20,
         fontSize: 24,
+        fontWeight: "bold",
+        marginBottom: 20,
+        textAlign: "center",
     },
     formGroup: {
         marginBottom: 15,
     },
+    label: {
+        fontSize: 16,
+        marginBottom: 5,
+    },
     input: {
         width: "100%",
         padding: 10,
-        marginVertical: 5,
         borderWidth: 1,
         borderColor: "#ccc",
-        borderRadius: 4,
+        borderRadius: 5,
     },
     errorInput: {
         borderColor: "red",
     },
     errorMessage: {
         color: "red",
-        fontSize: 12,
-        marginBottom: 10,
+        fontSize: 14,
+        marginTop: 5,
     },
     loginBtn: {
         backgroundColor: "#4CAF50",
-        padding: 10,
-        borderRadius: 4,
+        paddingVertical: 12,
+        borderRadius: 5,
         alignItems: "center",
     },
     loginBtnText: {
         color: "#fff",
         fontSize: 16,
+        fontWeight: "bold",
     },
     footerText: {
         flexDirection: "row",
@@ -157,7 +145,6 @@ const styles = StyleSheet.create({
     registerText: {
         color: "blue",
         fontSize: 16,
+        fontWeight: "bold",
     },
 });
-
-export default App;

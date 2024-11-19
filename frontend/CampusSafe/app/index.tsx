@@ -1,18 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Pressable } from "react-native";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { useRouter } from "expo-router";
 import AuthenticationSystem from "@/backend_apis/authentication_system/authentication_system";
 import Logger from "@/logging/logging";
-import HomePage from "./home"; // Example import for home page
-import RegisterPage from "./register"; // Example import for register page
-import Profile from "./profile"; // Import the Profile component
+import LoadingSpinner from "@/components/loading_spinner";
+import HomePage from "./home";
+import RegisterPage from "./register";
+import Profile from "./profile";
 
-const LoginPage = () => {
+const StartScreen = () => {
+    const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    const router = useRouter();
 
     const handleLogin = () => {
         if (email === "" || password === "") {
@@ -23,7 +24,7 @@ const LoginPage = () => {
                 .then((result) => {
                     if (result.success) {
                         Logger.info("Login successful!");
-                        router.push("/home"); // Navigate to home page on success
+                        router.push("/home");
                     } else {
                         setError("Invalid login credentials.");
                     }
@@ -38,6 +39,14 @@ const LoginPage = () => {
     const handleRegister = () => {
         router.push("/register");
     };
+
+    useEffect(() => {
+        AuthenticationSystem.isLoggedIn().then((result) => {
+            if (result) {
+                router.push("/home");
+            } 
+        });
+    }, []);
 
     return (
         <View style={styles.loginContainer}>
@@ -85,10 +94,10 @@ const App = () => {
     return (
         <Router>
             <Switch>
-                <Route path="/" exact component={LoginPage} />
+                <Route path="/" exact component={StartScreen} />
                 <Route path="/home" component={HomePage} />
                 <Route path="/register" component={RegisterPage} />
-                <Route path="/profile/:userId" component={Profile} /> {/* Add the Profile route */}
+                <Route path="/profile/:userId" component={Profile} />
             </Switch>
         </Router>
     );

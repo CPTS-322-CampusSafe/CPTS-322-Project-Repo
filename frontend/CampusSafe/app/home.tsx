@@ -1,16 +1,22 @@
 import React, { useState } from "react";
 import { TextInput, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useRouter } from "expo-router";
+import HomeHeader from "@/components/home_header";
 
 const Tab = createBottomTabNavigator();
 
 const ReportsScreen = () => {
     const [search, setSearch] = useState("");
+    const router = useRouter();
 
+    const handleCreateReport = () => {
+        router.push("/create_report");
+    };
     return (
         <View style={{ flex: 1 }}>
             {/* Create Report Button */}
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={handleCreateReport}>
                 <Text style={styles.buttonText}>Create Report</Text>
             </TouchableOpacity>
 
@@ -48,31 +54,21 @@ export default function Home() {
                     name="Reports"
                     component={ReportsScreen}
                     options={{
-                        title: "Reports",
-                        headerTitleStyle: {
-                            fontSize: 20,
-                            height: 30,
-                        },
+                        headerTitle: () => <HomeHeader pageTitle="Reports"></HomeHeader>,
                     }}
                 />
                 <Tab.Screen
                     name="Resources"
                     component={ResourcesScreen}
                     options={{
-                        title: "Resources",
-                        headerTitleStyle: {
-                            fontSize: 20,
-                        },
+                        headerTitle: () => <HomeHeader pageTitle="Resources"></HomeHeader>,
                     }}
                 />
                 <Tab.Screen
                     name="Profile"
                     component={ProfileScreen}
                     options={{
-                        title: "Profile",
-                        headerTitleStyle: {
-                            fontSize: 20,
-                        },
+                        headerTitle: () => <HomeHeader pageTitle="Profile"></HomeHeader>,
                     }}
                 />
             </Tab.Navigator>

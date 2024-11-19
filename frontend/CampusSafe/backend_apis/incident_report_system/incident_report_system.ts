@@ -29,7 +29,7 @@ export default class IncidentReportSystem {
                     description: report.description,
                     location: report.location,
                     emergency_level: report.emergencyLevel,
-                    happended_at: report.happenedAt,
+                    happened_at: report.happenedAt,
                 }),
             })
                 .then((response) => {

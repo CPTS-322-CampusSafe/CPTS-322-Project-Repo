@@ -19,7 +19,6 @@ export default class IncidentReport {
      * 5-10: emergencies (should send notification)
      */
     emergencyLevel: number = 0;
-
     happenedAt: Date = new Date(); // The time that the user said this incident happened
 
     deserialize(json: any) {
@@ -36,6 +35,6 @@ export default class IncidentReport {
         this.updatedAt = new Date(json.updated_at);
         this.verifiedAt = new Date(json.verified_at);
         this.resolvedAt = new Date(json.resolved_at);
-        this.happenedAt = new Date(json.happended_at);
+        this.happenedAt = new Date(json.happened_at);
     }
 }

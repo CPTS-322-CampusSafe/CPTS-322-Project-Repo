@@ -1,11 +1,15 @@
+
+import React from "react";
 import AuthenticationSystem from "@/backend_apis/authentication_system/authentication_system";
 import Logger from "@/logging/logging";
 import { useRouter } from "expo-router";
 import { View, Text, Image } from "react-native";
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from "react-native-popup-menu";
+import SettingsPage from "@/app/settings";
 
 const HomeHeader = (props: { pageTitle: string }) => {
     const router = useRouter();
+    const [showSettings, setShowSettings] = React.useState(false);
 
     return (
         <View
@@ -32,6 +36,12 @@ const HomeHeader = (props: { pageTitle: string }) => {
                 <MenuOptions>
                     <MenuOption
                         onSelect={() => {
+                            setShowSettings(true); // Show the Settings component
+                        }}
+                        text="Settings"
+                    />
+                    <MenuOption
+                        onSelect={() => {
                             AuthenticationSystem.logout().then((result) => {
                                 if (result) {
                                     router.push("/login");
@@ -44,6 +54,11 @@ const HomeHeader = (props: { pageTitle: string }) => {
                     />
                 </MenuOptions>
             </Menu>
+            {showSettings && (
+                <div className="settings-modal">
+                    <SettingsPage onClose={() => setShowSettings(false)} />
+                </div>
+            )}
         </View>
     );
 };

@@ -12,4 +12,4 @@ class SafetyPost(models.Model):
     content = models.FileField(upload_to="posts/")
     is_public = models.BooleanField(default=True)
 
-    user = models.ForeignKey(auth_api.models.User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(auth_api.models.User, on_delete=models.SET_NULL, null=True, blank=True)

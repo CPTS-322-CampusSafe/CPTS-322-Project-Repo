@@ -21,7 +21,7 @@ Additionally, run `pip freeze > requirements.txt` in the `backend` folder to add
 
 Also, to build/rebuild a Docker image run `docker build -t campus-safe .` in the `backend` directory.
 
-# Enabling Email Notifications
+## Enabling Email Notifications
 
 For debugging purposes a console backend can be used for email notifications (printing to the console instead of actually sending emails): To
 enable this set `FAKE_NOTIFICATIONS` to `True` in `campussafe/campussafe/settings.py`.

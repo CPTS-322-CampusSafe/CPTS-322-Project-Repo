@@ -33,11 +33,7 @@ const ReportsScreen = () => {
     );
 };
 
-const ResourcesScreen = () => (
-    <View style={styles.screen}>
-        <Text>No Resources Available</Text>
-    </View>
-);
+import ResourcesScreen from "./resource_screen";
 
 const ProfileScreen = () => (
     <View style={styles.screen}>

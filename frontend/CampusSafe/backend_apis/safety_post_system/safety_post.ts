@@ -15,5 +15,6 @@ export default class SafetyPost {
         this.author = json.author;
         this.isPublic = json.is_public;
         this.createdAt = new Date(json.created_at);
+        this.content = json.content;
     }
 }

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'auth_api.apps.AuthApiConfig',
     'report_incident_api.apps.ReportIncidentApiConfig',
+    'safety_post_api.apps.SafetyPostApiConfig',
     'phonenumber_field', # for the django-phonenumber-field library
     'rest_framework', # for the django-rest-framework
     'nested_admin', # for the django-nested-admin library

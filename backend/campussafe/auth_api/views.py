@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from django.contrib.auth import authenticate, login, logout
 from .serializers import UserSerializer
 from .models import Profile, UserSettings
-from phonenumber_field.validators import validate_international_phonenumber
 from django.middleware.csrf import get_token
+from .validators import validate_register_data
 
 @api_view(["POST"])
 def register_view(request):
@@ -14,23 +14,13 @@ def register_view(request):
     Creates a new account for a user.
     """
 
-    # Make sure phone_number field exists
-    try:
-        phone_number = request.data["phone_number"]
-    except:
-        return Response({ "phone_number": ["This field is required"] }, status=status.HTTP_400_BAD_REQUEST)
+    errors = validate_register_data(request.data)
 
-    # Make sure the phone number is a valid phone number
-    try:
-        validate_international_phonenumber(phone_number)
-    except:
-        return Response({ "phone_number": ["Invalid phone number"] }, status=status.HTTP_400_BAD_REQUEST)
+    if errors != None:
+        return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
-    # Make sure a user_data section is present
-    try:
-        user_data = request.data["user_data"]
-    except:
-        return Response({ "user_data": ["This field is required"] }, status=status.HTTP_400_BAD_REQUEST)
+    phone_number = request.data["phone_number"]
+    user_data = request.data["user_data"]
 
     # Serialize the user_data and other information
     serializer = UserSerializer(data=user_data)

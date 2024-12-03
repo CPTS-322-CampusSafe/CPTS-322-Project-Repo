@@ -9,7 +9,7 @@ import SettingsPage from "@/app/settings";
 
 const HomeHeader = (props: { pageTitle: string }) => {
     const router = useRouter();
-    const [showSettings, setShowSettings] = React.useState(false);
+    
 
     return (
         <View
@@ -34,9 +34,9 @@ const HomeHeader = (props: { pageTitle: string }) => {
                     <Image source={require("../assets/images/menu_icon_vertical_dots.png")} style={{ width: 6, height: 26 }} />
                 </MenuTrigger>
                 <MenuOptions>
-                    <MenuOption
+                <MenuOption
                         onSelect={() => {
-                            setShowSettings(true); // Show the Settings component
+                            router.push("/settings_page");
                         }}
                         text="Settings"
                     />
@@ -54,11 +54,7 @@ const HomeHeader = (props: { pageTitle: string }) => {
                     />
                 </MenuOptions>
             </Menu>
-            {showSettings && (
-                <div className="settings-modal">
-                    <SettingsPage onClose={() => setShowSettings(false)} />
-                </div>
-            )}
+                  
         </View>
     );
 };

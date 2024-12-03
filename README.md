@@ -64,4 +64,4 @@ Here are some additional notes for running the front end and back end together:
 
 Run `npm test` to run all front end test cases.
 
-Run `pytest` to run all the back end test cases.
+Run `python manage.py test` to run all the back end test cases.

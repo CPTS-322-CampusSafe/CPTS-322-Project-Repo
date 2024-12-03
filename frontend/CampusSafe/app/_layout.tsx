@@ -10,7 +10,7 @@ export default function RootLayout() {
                 <Stack.Screen name="register" options={{ headerShown: false }} />
                 <Stack.Screen name="login" options={{ headerShown: false }} />
                 <Stack.Screen name="create_report" options={{ headerShown: false }} />
-                <Stack.Screen name="settings_page" options={{ headerShown: false }} />
+                <Stack.Screen name="settings" options={{ headerShown: false }} />
             </Stack>
         </MenuProvider>
     );

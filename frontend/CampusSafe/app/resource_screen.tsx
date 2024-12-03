@@ -1,9 +1,9 @@
-import SafetyPost from '@/backend_apis/safety_post_system/safety_post';
-import SafetyPostSystem from '@/backend_apis/safety_post_system/safety_post_system';
-import React from 'react';
-import { Text, View, StyleSheet, FlatList, Platform, ScrollView } from 'react-native';
-import { WebView } from 'react-native-webview';
-import Logger from "../logging/logging"; 
+import SafetyPost from "@/backend_apis/safety_post_system/safety_post";
+import SafetyPostSystem from "@/backend_apis/safety_post_system/safety_post_system";
+import React from "react";
+import { Text, View, StyleSheet, FlatList, Platform, ScrollView, TouchableOpacity, Pressable } from "react-native";
+import HTMLView from "react-native-htmlview";
+import { Colors } from "@/constants/colors";
 
 const htmlContent = `
     <html>
@@ -62,12 +62,12 @@ const getDummyData = () => {
         data.push(newPost);
     }
     return data;
-}
+};
 
 const ResourcesScreen = () => {
-    //const [posts, setPosts] = React.useState<SafetyPost[]>([]); 
-    const [posts, setPosts] = React.useState<SafetyPost[]>(getDummyData()); 
-    console.log(posts)
+    //const [posts, setPosts] = React.useState<SafetyPost[]>([]);
+    const [posts, setPosts] = React.useState<SafetyPost[]>(getDummyData());
+    const [currentPost, setCurrentPost] = React.useState<SafetyPost | undefined>(undefined);
 
     // React.useEffect(() => {
     //     SafetyPostSystem.getPosts()
@@ -84,91 +84,118 @@ const ResourcesScreen = () => {
     //         }
     //     );
     //   }, []);
-  
+
     return (
         <View style={styles.screen}>
-            <FlatList
-                data={posts}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                    <View style={styles.postContainer}>
-                        <Text style={styles.title}>{item.title}</Text>
-                        <Text style={styles.author}>By: {item.author}</Text>
-                        <Text style={styles.date}>Date: {item.createdAt.toLocaleDateString()}</Text>
+            {currentPost === undefined ? (
+                // Post list:
+                <FlatList
+                    data={posts}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity
+                            onPress={() => {
+                                setCurrentPost(item);
+                            }}
+                        >
+                            <View style={styles.postContainer}>
+                                <Text style={styles.title}>{item.title}</Text>
+                                <Text style={styles.author}>By: {item.author}</Text>
+                                <Text style={styles.date}>Date: {item.createdAt.toLocaleDateString()}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    )}
+                    contentContainerStyle={styles.listContainer}
+                />
+            ) : (
+                // Individual post:
+                <View style={styles.screen}>
+                    <Pressable
+                        onPress={() => {
+                            setCurrentPost(undefined);
+                        }}
+                    >
+                        <Text style={styles.backButton}>&#x25C0; Back</Text>
+                    </Pressable>
 
-                        {Platform.OS === 'web' ? (
+                    <ScrollView>
+                        {Platform.OS === "web" ? (
                             // For Web platform, use iframe (fallback to iframe if needed)
-                            <iframe
-                                title={item.title}
-                                srcDoc={item.content}
-                                style={styles.iframe}
-                            />
+                            <iframe title={currentPost.title} srcDoc={currentPost.content} style={styles.iframe} />
                         ) : (
                             // For mobile platforms, use WebView
-                            <WebView
-                                originWhitelist={['*']}
-                                source={{ html: item.content }}
-                                style={styles.webView} 
-                            />
+                            <HTMLView value={`<div>${htmlContent.replace(/(\r\n|\n|\r)/gm, "")}</div>`} stylesheet={htmlStyles} textComponentProps={{ style: htmlStyles.p }} />
                         )}
-                    </View>
-                )}
-                contentContainerStyle={styles.listContainer}
-            />
+                    </ScrollView>
+                </View>
+            )}
         </View>
     );
 };
 
+const htmlStyles = StyleSheet.create({
+    h1: {
+        color: Colors.black,
+        fontSize: 25,
+        fontWeight: "bold",
+    },
+    p: {
+        color: Colors.black,
+    },
+    div: {
+        padding: 20,
+    },
+});
+
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
-        justifyContent: 'center',
-        width: '100%', 
+        justifyContent: "center",
+        width: "100%",
     },
     listContainer: {
         padding: 16,
-        flexGrow: 1, 
+        flexGrow: 1,
     },
     postContainer: {
         marginBottom: 16,
         padding: 16,
         borderRadius: 8,
-        backgroundColor: '#f9f9f9',
-        shadowColor: '#000',
+        backgroundColor: "#f9f9f9",
+        shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 3,
-        width: '100%', 
+        width: "100%",
     },
     title: {
         fontSize: 18,
-        fontWeight: 'bold',
+        fontWeight: "bold",
         marginBottom: 8,
     },
     author: {
         fontSize: 14,
-        color: '#555',
+        color: "#555",
         marginBottom: 8,
-    },
-    webView: {
-        marginTop: 16,
-        width: '100%', 
-        height: 200, 
     },
     iframe: {
         marginTop: 16,
-        width: '100%',
+        width: "100%",
         height: 200,
     },
     content: {
         fontSize: 16,
-        color: '#333',
+        color: "#333",
         marginBottom: 8,
     },
     date: {
         fontSize: 12,
-        color: '#888',
+        color: "#888",
+    },
+    backButton: {
+        fontSize: 18,
+        color: Colors.primary,
     },
 });
 

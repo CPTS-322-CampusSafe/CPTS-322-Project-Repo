@@ -1,11 +1,15 @@
+
+import React from "react";
 import AuthenticationSystem from "@/backend_apis/authentication_system/authentication_system";
 import Logger from "@/logging/logging";
 import { useRouter } from "expo-router";
 import { View, Text, Image } from "react-native";
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from "react-native-popup-menu";
+import SettingsPage from "@/app/settings";
 
 const HomeHeader = (props: { pageTitle: string }) => {
     const router = useRouter();
+    
 
     return (
         <View
@@ -30,6 +34,12 @@ const HomeHeader = (props: { pageTitle: string }) => {
                     <Image source={require("../assets/images/menu_icon_vertical_dots.png")} style={{ width: 6, height: 26 }} />
                 </MenuTrigger>
                 <MenuOptions>
+                <MenuOption
+                        onSelect={() => {
+                            router.push("/settings");
+                        }}
+                        text="Settings"
+                    />
                     <MenuOption
                         onSelect={() => {
                             AuthenticationSystem.logout().then((result) => {
@@ -44,6 +54,7 @@ const HomeHeader = (props: { pageTitle: string }) => {
                     />
                 </MenuOptions>
             </Menu>
+                  
         </View>
     );
 };

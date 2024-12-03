@@ -36,7 +36,7 @@ const HomeHeader = (props: { pageTitle: string }) => {
                 <MenuOptions>
                 <MenuOption
                         onSelect={() => {
-                            router.push("/settings_page");
+                            router.push("/settings");
                         }}
                         text="Settings"
                     />

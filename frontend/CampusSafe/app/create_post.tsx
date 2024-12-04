@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Button } from "react-native";
 import { useRouter } from "expo-router";
 import { Switch } from "react-native";
 
@@ -21,7 +21,7 @@ const SafetyPostScreen = () => {
         post.isPublic = isPublic;
         post.content = content;
 
-        SafetyPostSystem.createPost(post).then((post) => {
+        SafetyPostSystem.createPost(post).then((result) => {
             Logger.debug("Post from createPost:", result);
             if (result.success) {
                 Logger.debug("Post submitted successfully!");
@@ -36,7 +36,7 @@ const SafetyPostScreen = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
             <Text style={styles.title}>Create Safety Post</Text>
             <TextInput
                 placeholder="Title"
@@ -62,10 +62,44 @@ const SafetyPostScreen = () => {
                 style={[styles.input, styles.textArea]}
             />
             <Button title="Submit Post" onPress={createPost} color="#990000" />
-        </View>
+        </ScrollView>
     );
 };
 
-
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 30,
+        backgroundColor: "#fff",
+    },
+    title: {
+        fontSize: 28,
+        fontWeight: "bold",
+        marginBottom: 20,
+        textAlign: "center",
+    },
+    input: {
+        height: 40,
+        borderColor: "#ccc",
+        borderWidth: 1,
+        borderRadius: 5,
+        marginBottom: 10,
+        paddingHorizontal: 10,
+    },
+    textArea: {
+        height: 150,
+        textAlignVertical: "top",
+        padding: 10,
+    },
+    switchContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginVertical: 10,
+    },
+    label: {
+        marginRight: 10,
+        fontSize: 16,
+    },
+});
 
 export default SafetyPostScreen;

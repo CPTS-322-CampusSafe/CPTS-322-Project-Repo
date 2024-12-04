@@ -4,6 +4,7 @@ import React from "react";
 import { Text, View, StyleSheet, FlatList, Platform, ScrollView, TouchableOpacity, Pressable } from "react-native";
 import HTMLView from "react-native-htmlview";
 import { Colors } from "@/constants/colors";
+import { useRouter } from "expo-router";
 
 const htmlContent = `
     <html>
@@ -68,7 +69,11 @@ const ResourcesScreen = () => {
     //const [posts, setPosts] = React.useState<SafetyPost[]>([]);
     const [posts, setPosts] = React.useState<SafetyPost[]>(getDummyData());
     const [currentPost, setCurrentPost] = React.useState<SafetyPost | undefined>(undefined);
+    const router = useRouter();
 
+    const handleCreatePost = () => {
+        router.push("/create_post"); // Navigate to the create_post screen
+    };
     // React.useEffect(() => {
     //     SafetyPostSystem.getPosts()
     //         .then((result) => {
@@ -87,8 +92,13 @@ const ResourcesScreen = () => {
 
     return (
         <View style={styles.screen}>
+            <TouchableOpacity style={styles.button} onPress={handleCreatePost}>
+                <Text style={styles.buttonText}>Create Post</Text>
+            </TouchableOpacity>
+
             {currentPost === undefined ? (
                 // Post list:
+
                 <FlatList
                     data={posts}
                     keyExtractor={(item) => item.id.toString()}
@@ -196,6 +206,19 @@ const styles = StyleSheet.create({
     backButton: {
         fontSize: 18,
         color: Colors.primary,
+    },
+    button: {
+        backgroundColor: Colors.primary,
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+        margin: 10,
+        alignItems: "center",
+    },
+    buttonText: {
+        color: "white",
+        fontSize: 16,
+        fontWeight: "bold",
     },
 });
 

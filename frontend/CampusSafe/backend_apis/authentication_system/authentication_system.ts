@@ -2,6 +2,7 @@ import Logger from "@/logging/logging";
 import * as SecureStore from "expo-secure-store";
 import { authAPI_URL } from "../urls";
 import { Platform } from "react-native";
+import UserSettings from "./user_settings";
 
 /**
  * Handles all the authentication operations such as logging in, registering, and logging out.
@@ -16,12 +17,12 @@ export default class AuthenticationSystem {
         return new Promise((resolve, reject) => {
             // Get stored CSRF token if it exists
             if (Platform.OS !== "web") {
-              SecureStore.getItemAsync("csrfToken").then((token) => {
-                  if (token != null && token !== "") {
-                      AuthenticationSystem.csrfToken = token;
-                      resolve(true);
-                  }
-              });
+                SecureStore.getItemAsync("csrfToken").then((token) => {
+                    if (token != null && token !== "") {
+                        AuthenticationSystem.csrfToken = token;
+                        resolve(true);
+                    }
+                });
             }
 
             // Get the CSRF token
@@ -269,6 +270,41 @@ export default class AuthenticationSystem {
                     }
 
                     resolve({ success: success, message: message });
+                })
+                .catch((error) => {
+                    Logger.error(error); // There was an error
+                    reject();
+                });
+        });
+    }
+
+    /**
+     * Updates the current user's settings.
+     *
+     * @param newSettings The new settings.
+     * @returns A Promise of whether the operation succeeded or not.
+     */
+    static updateSettings(newSettings: UserSettings): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            fetch(`${authAPI_URL}/update_settings/`, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": AuthenticationSystem.csrfToken,
+                },
+                body: JSON.stringify({
+                    recieve_email_notifications: newSettings.recieveEmailNotifications,
+                    recieve_SMS_notifications: newSettings.recieveSMSNotifications,
+                    recieve_in_app_notifications: newSettings.recieveInAppNotifications,
+                }),
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        resolve(true);
+                    } else {
+                        resolve(false);
+                    }
                 })
                 .catch((error) => {
                     Logger.error(error); // There was an error

@@ -105,3 +105,26 @@ def get_csrf_token(request):
 
     csrf_token = get_token(request)
     return Response({ 'csrfToken': csrf_token })
+
+@api_view(["POST"])
+def update_settings_view(request):
+    """
+    Updates the settings for a user.
+    """
+
+    try:
+        emailNotificaitons = request.data["recieve_email_notifications"]
+        smsNotifications = request.data["recieve_SMS_notifications"]
+        inAppNotifications = request.data["recieve_in_app_notifications"]
+
+        if request.user.is_authenticated:
+            settings = request.user.profile.usersettings
+            settings.recieve_email_notifications = emailNotificaitons
+            settings.recieve_SMS_notifications = smsNotifications
+            settings.recieve_in_app_notifications = inAppNotifications
+            settings.save()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)

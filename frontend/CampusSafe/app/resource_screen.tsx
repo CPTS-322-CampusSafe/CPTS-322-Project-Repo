@@ -4,90 +4,33 @@ import React from "react";
 import { Text, View, StyleSheet, FlatList, Platform, ScrollView, TouchableOpacity, Pressable } from "react-native";
 import HTMLView from "react-native-htmlview";
 import { Colors } from "@/constants/colors";
-
-const htmlContent = `
-    <html>
-      <head>
-        <style>
-          body { font-family: Arial, sans-serif; }
-          h1 { color: #4CAF50; }
-          p { color: #555; }
-        </style>
-      </head>
-      <body>
-        <h1>Safety Tips</h1>
-        <p>Here are some important safety tips:</p>
-        <ul>
-          <li>Wear a seatbelt.</li>
-          <li>Don't use your phone while driving.</li>
-          <li>Ensure smoke alarms are working.</li>
-        </ul>
-      </body>
-    </html>
-  `;
-
-// Dummy data for posts
-const dummyData = [
-    {
-        id: 1,
-        title: "Fire Safety Tips",
-        author: "John Doe",
-        content: htmlContent,
-        is_public: true,
-        created_at: "2024-11-01T10:00:00Z",
-    },
-    {
-        id: 2,
-        title: "Road Safety Rules",
-        author: "Jane Smith",
-        content: htmlContent,
-        is_public: true,
-        created_at: "2024-11-05T10:00:00Z",
-    },
-    {
-        id: 3,
-        title: "Cybersecurity Awareness",
-        author: "Alex Brown",
-        content: htmlContent,
-        is_public: true,
-        created_at: "2024-11-10T10:00:00Z",
-    },
-];
-
-const getDummyData = () => {
-    let data = new Array<SafetyPost>();
-    for (let json of dummyData) {
-        let newPost = new SafetyPost();
-        newPost.deserialize(json);
-        data.push(newPost);
-    }
-    return data;
-};
+import Logger from "@/logging/logging";
+import LoadingSpinner from "@/components/loading_spinner";
 
 const ResourcesScreen = () => {
-    //const [posts, setPosts] = React.useState<SafetyPost[]>([]);
-    const [posts, setPosts] = React.useState<SafetyPost[]>(getDummyData());
+    const [posts, setPosts] = React.useState<SafetyPost[] | undefined>(undefined);
     const [currentPost, setCurrentPost] = React.useState<SafetyPost | undefined>(undefined);
 
-    // React.useEffect(() => {
-    //     SafetyPostSystem.getPosts()
-    //         .then((result) => {
-    //             if (result.success) {
-    //                 Logger.debug("Succesfully retrieved posts.");
-    //                 setPosts(result.posts);
-    //             } else {
-    //                 Logger.error("Post retrieval failed.");
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             Logger.error("Error in retrieving posts.");
-    //         }
-    //     );
-    //   }, []);
+    React.useEffect(() => {
+        SafetyPostSystem.getPosts()
+            .then((result) => {
+                if (result.success) {
+                    Logger.debug("Succesfully retrieved posts.");
+                    setPosts(result.posts);
+                } else {
+                    Logger.error("Post retrieval failed.");
+                }
+            })
+            .catch((error) => {
+                Logger.error("Error in retrieving posts.");
+            });
+    }, []);
 
     return (
         <View style={styles.screen}>
-            {currentPost === undefined ? (
+            {posts === undefined ? ( // If the posts are still being fetched:
+                <LoadingSpinner></LoadingSpinner>
+            ) : currentPost === undefined ? ( // If a post is not selected yet:
                 // Post list:
                 <FlatList
                     data={posts}
@@ -108,26 +51,56 @@ const ResourcesScreen = () => {
                     contentContainerStyle={styles.listContainer}
                 />
             ) : (
-                // Individual post:
-                <View style={styles.screen}>
-                    <Pressable
-                        onPress={() => {
-                            setCurrentPost(undefined);
-                        }}
-                    >
-                        <Text style={styles.backButton}>&#x25C0; Back</Text>
-                    </Pressable>
+                // If a post is selected:
+                <Post
+                    post={currentPost}
+                    onGoBack={() => {
+                        setCurrentPost(undefined);
+                    }}
+                ></Post>
+            )}
+        </View>
+    );
+};
 
-                    <ScrollView>
-                        {Platform.OS === "web" ? (
-                            // For Web platform, use iframe (fallback to iframe if needed)
-                            <iframe title={currentPost.title} srcDoc={currentPost.content} style={styles.iframe} />
-                        ) : (
-                            // For mobile platforms, use WebView
-                            <HTMLView value={`<div>${htmlContent.replace(/(\r\n|\n|\r)/gm, "")}</div>`} stylesheet={htmlStyles} textComponentProps={{ style: htmlStyles.p }} />
-                        )}
-                    </ScrollView>
-                </View>
+const Post = ({ post, onGoBack }: { post: SafetyPost; onGoBack: () => void }) => {
+    const [content, setContent] = React.useState<string | undefined>(undefined);
+
+    React.useEffect(() => {
+        SafetyPostSystem.getPostContent(post.id)
+            .then((result) => {
+                if (result.success) {
+                    Logger.debug("Succesfully retrieved post content.");
+                    setContent(result.content);
+                } else {
+                    Logger.error("Post content retrieval failed.");
+                }
+            })
+            .catch((error) => {
+                Logger.error("Error in retrieving post content.");
+            });
+    });
+
+    return (
+        <View style={styles.screen}>
+            <Pressable onPress={onGoBack}>
+                <Text style={styles.backButton}>&#x25C0; Back</Text>
+            </Pressable>
+
+            {content === undefined ? (
+                <ScrollView>
+                    <LoadingSpinner></LoadingSpinner>
+                </ScrollView>
+            ) : (
+                <ScrollView>
+                    {Platform.OS === "web" ? (
+                        // For Web platform, use iframe (fallback to iframe if needed)
+                        <iframe title={post.title} srcDoc={content} style={styles.iframe} />
+                    ) : (
+                        // For mobile platforms, use WebView
+                        <HTMLView value={`<div>${content.replace(/(\r\n|\n|\r|\\r|\\n)/gm, "")}</div>`} stylesheet={htmlStyles} />
+                    )}
+                </ScrollView>
             )}
         </View>
     );

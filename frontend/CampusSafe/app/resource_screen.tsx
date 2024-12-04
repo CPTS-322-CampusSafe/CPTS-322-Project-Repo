@@ -4,13 +4,18 @@ import React from "react";
 import { Text, View, StyleSheet, FlatList, Platform, ScrollView, TouchableOpacity, Pressable } from "react-native";
 import HTMLView from "react-native-htmlview";
 import { Colors } from "@/constants/colors";
+import { useRouter } from "expo-router";
 import Logger from "@/logging/logging";
 import LoadingSpinner from "@/components/loading_spinner";
 
 const ResourcesScreen = () => {
     const [posts, setPosts] = React.useState<SafetyPost[] | undefined>(undefined);
     const [currentPost, setCurrentPost] = React.useState<SafetyPost | undefined>(undefined);
+    const router = useRouter();
 
+    const handleCreatePost = () => {
+        router.push("/create_post"); // Navigate to the create_post screen
+    };
     React.useEffect(() => {
         SafetyPostSystem.getPosts()
             .then((result) => {
@@ -32,24 +37,30 @@ const ResourcesScreen = () => {
                 <LoadingSpinner></LoadingSpinner>
             ) : currentPost === undefined ? ( // If a post is not selected yet:
                 // Post list:
-                <FlatList
-                    data={posts}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                            onPress={() => {
-                                setCurrentPost(item);
-                            }}
-                        >
-                            <View style={styles.postContainer}>
-                                <Text style={styles.title}>{item.title}</Text>
-                                <Text style={styles.author}>By: {item.author}</Text>
-                                <Text style={styles.date}>Date: {item.createdAt.toLocaleDateString()}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                    contentContainerStyle={styles.listContainer}
-                />
+                <>
+                    <TouchableOpacity style={styles.button} onPress={handleCreatePost}>
+                        <Text style={styles.buttonText}>Create Post</Text>
+                    </TouchableOpacity>
+
+                    <FlatList
+                        data={posts}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setCurrentPost(item);
+                                }}
+                            >
+                                <View style={styles.postContainer}>
+                                    <Text style={styles.title}>{item.title}</Text>
+                                    <Text style={styles.author}>By: {item.author}</Text>
+                                    <Text style={styles.date}>Date: {item.createdAt.toLocaleDateString()}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                        contentContainerStyle={styles.listContainer}
+                    />
+                </>
             ) : (
                 // If a post is selected:
                 <Post
@@ -127,8 +138,8 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     listContainer: {
-        padding: 16,
         flexGrow: 1,
+        padding: 16,
     },
     postContainer: {
         marginBottom: 16,
@@ -169,6 +180,22 @@ const styles = StyleSheet.create({
     backButton: {
         fontSize: 18,
         color: Colors.primary,
+    },
+    button: {
+        width: 140,
+        height: 34,
+        backgroundColor: "#990000", // Button color
+        padding: 5,
+        borderRadius: 5,
+        justifyContent: "center",
+        alignItems: "center",
+        alignSelf: "flex-end",
+        margin: 20,
+    },
+    buttonText: {
+        color: "white",
+        fontSize: 16,
+        fontWeight: "bold",
     },
 });
 

@@ -14,33 +14,25 @@ const SafetyPostScreen = () => {
     const [content, setContent] = useState("");
     const router = useRouter();
 
-    const createPost = async () => {
-        if (!title || !author || !content) {
-            Alert.alert("Error", "All fields are required.");
-            return;
-        }
-
-        const post = new SafetyPost();
+    const createPost = () => {
+        let post = new SafetyPost();
         post.title = title;
         post.author = author;
         post.isPublic = isPublic;
         post.content = content;
 
-        try {
-            const result = await SafetyPostSystem.createPost(post);
-            Logger.debug("Result from createPost:", result);
-
+        SafetyPostSystem.createPost(post).then((post) => {
+            Logger.debug("Post from createPost:", result);
             if (result.success) {
-                Alert.alert("Success", "Post submitted successfully!");
+                Logger.debug("Post submitted successfully!");
                 router.push("/home");
             } else {
-                Alert.alert("Error", `Post submission failed: ${result.message}`);
                 Logger.error(`Post submission failed: ${result.message}`);
             }
-        } catch (error) {
-            Alert.alert("Error", "An unexpected error occurred.");
-            Logger.error(`Error submitting post: ${error}`);
-        }
+            })
+            .catch((error) => {
+                Logger.error(`Error submitting Post: ${error}`);
+            });
     };
 
     return (

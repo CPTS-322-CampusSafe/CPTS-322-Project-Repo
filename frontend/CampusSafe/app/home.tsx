@@ -34,8 +34,14 @@ const ReportsScreen = () => {
 };
 
 const ResourcesScreen = () => (
+    const handleCreatePost = () => {
+            router.push("/create_post");
+        };
     <View style={styles.screen}>
         <Text>No Resources Available</Text>
+        <TouchableOpacity style={styles.button} onPress={handleCreatePost}>
+            <Text style={styles.buttonText}>Create Post</Text>
+        </TouchableOpacity>
     </View>
 );
 

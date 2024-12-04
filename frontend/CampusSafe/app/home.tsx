@@ -5,35 +5,9 @@ import { useRouter } from "expo-router";
 import HomeHeader from "@/components/home_header";
 import ResourcesScreen from "./resource_screen";
 import ProfileScreen from "./profile";
+import ReportsScreen from "./reports";
 
 const Tab = createBottomTabNavigator();
-
-const ReportsScreen = () => {
-    const [search, setSearch] = useState("");
-    const router = useRouter();
-
-    const handleCreateReport = () => {
-        router.push("/create_report");
-    };
-    return (
-        <View style={{ flex: 1 }}>
-            {/* Create Report Button */}
-            <TouchableOpacity style={styles.button} onPress={handleCreateReport}>
-                <Text style={styles.buttonText}>Create Report</Text>
-            </TouchableOpacity>
-
-            {/* Search Bar */}
-            <View style={styles.searchContainer}>
-                <TextInput style={styles.searchInput} placeholder="Search..." value={search} onChangeText={setSearch} />
-            </View>
-
-            {/* Box with Border */}
-            <View style={styles.boxContainer}>
-                <Text>Display Reports</Text>
-            </View>
-        </View>
-    );
-};
 
 export default function Home() {
     return (

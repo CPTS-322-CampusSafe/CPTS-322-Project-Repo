@@ -14,7 +14,6 @@ const ProfileScreen = () => {
                 if (response.success) {
                     setProfile(response.data);
                     setLoading(false);
-                    console.log(profile);
                     Logger.debug("Successfully got profile.");
                 } else {
                     Logger.debug("Failed to get profile.");

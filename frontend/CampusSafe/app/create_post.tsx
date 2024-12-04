@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { Switch } from "react-native";
 
@@ -25,7 +25,7 @@ const SafetyPostScreen = () => {
             Logger.debug("Post from createPost:", result);
             if (result.success) {
                 Logger.debug("Post submitted successfully!");
-                router.push("/home");
+                router.push("/resource_screen");
             } else {
                 Logger.error(`Post submission failed: ${result.message}`);
             }

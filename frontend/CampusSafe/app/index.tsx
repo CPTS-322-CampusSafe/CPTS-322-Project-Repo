@@ -8,14 +8,19 @@ const StartScreen = () => {
     const router = useRouter();
 
     useEffect(() => {
-        // Check if user is logged in:
-        AuthenticationSystem.isLoggedIn().then((result) => {
+        // Initialize:
+        AuthenticationSystem.init().then((result) => {
             if (result) {
-                // Logged in:
-                router.push("/home");
-            } else {
-                // Not logged in:
-                router.push("/login");
+                // Check if user is logged in:
+                AuthenticationSystem.isLoggedIn().then((result) => {
+                    if (result) {
+                        // Logged in:
+                        router.push("/home");
+                    } else {
+                        // Not logged in:
+                        router.push("/login");
+                    }
+                });
             }
         });
     });

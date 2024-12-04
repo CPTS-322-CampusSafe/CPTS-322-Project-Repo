@@ -59,3 +59,9 @@ Here are some additional notes for running the front end and back end together:
    - `docker run -p 8000:8000 -d josephbuchholz/campus-safe`
    - Run `docker logs --follow <container_id>` to view the logs
    - Run `docker stop <container_id>` to stop the server
+
+## Testing
+
+Run `npm test` to run all front end test cases.
+
+Run `python manage.py test` to run all the back end test cases.

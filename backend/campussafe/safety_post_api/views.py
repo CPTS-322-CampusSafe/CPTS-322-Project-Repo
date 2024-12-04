@@ -12,7 +12,7 @@ def create_post(request):
 
     user = None
 
-    if request.user.is_authenticated and request.user.is_user_admin:
+    if request.user.is_authenticated and request.user.profile.is_user_admin:
         user = request.user
     else:
         return Response(status=status.HTTP_403_FORBIDDEN)

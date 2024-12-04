@@ -97,3 +97,36 @@ def get_reports(request):
 
     serializer = IncidentReportSerializer(reports, many=True)
     return Response(serializer.data)
+
+@api_view(["GET"])
+def search_reports(request):
+    """
+    Searches all incident reports.
+    """
+
+    page_size = request.query_params.get("page_size")
+    page_number = request.query_params.get("page_number")
+    search_query = request.query_params.get("search_query")
+
+    if search_query == None:
+        return Response("Must contain a search_query paramerter.", status=status.HTTP_400_BAD_REQUEST)
+
+    if is_int(page_size) and is_int(page_number.isdigit()):
+        page_size = int(page_size)
+        page_number = int(page_number)
+    else:
+        page_size = DEFAULT_PAGE_SIZE
+        page_number = 0
+
+    start_index = page_number * page_size
+
+    # Get only verified reports sorted in order from newest to oldest
+    reports = IncidentReport.objects.filter(is_verified=True)
+
+    if search_query != "":
+        reports = reports.filter(title__icontains=search_query) or reports.filter(summary__icontains=search_query) or reports.filter(description__icontains=search_query) or reports.filter(location__icontains=search_query)
+
+    reports = reports.order_by("-recieved_at")[start_index:(start_index + page_size)]
+
+    serializer = IncidentReportSerializer(reports, many=True)
+    return Response(serializer.data)

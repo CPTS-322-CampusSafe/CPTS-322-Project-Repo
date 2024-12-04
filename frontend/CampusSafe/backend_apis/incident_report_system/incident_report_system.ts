@@ -56,11 +56,47 @@ export default class IncidentReportSystem {
      *
      * @returns A Promise containing the requested reports.
      */
-    static getReports(): Promise<{ success: boolean; reports: IncidentReport[] }> {
+    static getReports(pageNumber: number = 0, pageSize: number = 8): Promise<{ success: boolean; reports: IncidentReport[] }> {
         let success = false;
 
         return new Promise((resolve, reject) => {
-            fetch(`${reportAPI_URL}/get_reports/`)
+            fetch(`${reportAPI_URL}/get_reports?page_size=${pageSize}&page_number=${pageNumber}`)
+                .then((response) => {
+                    if (response.ok) {
+                        success = true;
+                        return response.json();
+                    } else {
+                        resolve({ success: success, reports: [] });
+                    }
+                })
+                .then((json) => {
+                    let reports = new Array<IncidentReport>();
+
+                    for (let report of json) {
+                        let newReport = new IncidentReport();
+                        newReport.deserialize(report);
+                        reports.push(newReport);
+                    }
+
+                    resolve({ success: success, reports: reports });
+                })
+                .catch((error) => {
+                    Logger.error(error); // There was an error
+                    reject();
+                });
+        });
+    }
+
+    /**
+     * Searches for incident reports.
+     *
+     * @returns A Promise containing the requested reports.
+     */
+    static searchReports(serachQuery: string, pageNumber: number = 0, pageSize: number = 8): Promise<{ success: boolean; reports: IncidentReport[] }> {
+        let success = false;
+
+        return new Promise((resolve, reject) => {
+            fetch(`${reportAPI_URL}/serach_reports?page_size=${pageSize}&page_number=${pageNumber}&search_query=${serachQuery}`)
                 .then((response) => {
                     if (response.ok) {
                         success = true;

@@ -1,6 +1,7 @@
 import IncidentReport from "@/backend_apis/incident_report_system/incident_report";
 import IncidentReportSystem from "@/backend_apis/incident_report_system/incident_report_system";
 import LoadingSpinner from "@/components/loading_spinner";
+import { Colors } from "@/constants/colors";
 import Logger from "@/logging/logging";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -101,8 +102,8 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         padding: 16,
         borderRadius: 8,
-        backgroundColor: "#f9f9f9",
-        shadowColor: "#000",
+        backgroundColor: Colors.background,
+        shadowColor: Colors.black,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
@@ -125,14 +126,14 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 20, // Position it near the top
         right: 20, // Align to the right side
-        backgroundColor: "#990000", // Button color
+        backgroundColor: Colors.primary, // Button color
         padding: 5,
         borderRadius: 5,
         justifyContent: "center",
         alignItems: "center",
     },
     buttonText: {
-        color: "#fff", // Text color for the button
+        color: Colors.primaryText, // Text color for the button
         fontSize: 16,
         fontWeight: "bold",
     },
@@ -145,11 +146,11 @@ const styles = StyleSheet.create({
     },
     searchInput: {
         height: 40,
-        borderColor: "#ccc",
+        borderColor: Colors.border,
         borderWidth: 1,
         borderRadius: 10,
         paddingHorizontal: 10,
-        backgroundColor: "#fff",
+        backgroundColor: Colors.white,
     },
     boxContainer: {
         position: "absolute",
@@ -159,10 +160,10 @@ const styles = StyleSheet.create({
         width: 335,
         height: 490, // Set the height of the box
         borderWidth: 1,
-        borderColor: "#808080", // Border color (black)
+        borderColor: Colors.secondary,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#f9f9f9", // Background color of the box
+        backgroundColor: Colors.background, // Background color of the box
     },
     screen: {
         flex: 1,

@@ -6,6 +6,7 @@ import { Switch } from "react-native";
 import SafetyPostSystem from "../backend_apis/safety_post_system/safety_post_system";
 import SafetyPost from "../backend_apis/safety_post_system/safety_post";
 import Logger from "../logging/logging";
+import { Colors } from "@/constants/colors";
 
 const SafetyPostScreen = () => {
     const [title, setTitle] = useState("");
@@ -21,14 +22,15 @@ const SafetyPostScreen = () => {
         post.isPublic = isPublic;
         post.content = content;
 
-        SafetyPostSystem.createPost(post).then((result) => {
-            Logger.debug("Post from createPost:", result);
-            if (result.success) {
-                Logger.debug("Post submitted successfully!");
-                router.push("/resource_screen");
-            } else {
-                Logger.error(`Post submission failed: ${result.message}`);
-            }
+        SafetyPostSystem.createPost(post)
+            .then((result) => {
+                Logger.debug("Post from createPost:", result);
+                if (result.success) {
+                    Logger.debug("Post submitted successfully!");
+                    router.push("/resource_screen");
+                } else {
+                    Logger.error(`Post submission failed: ${result.message}`);
+                }
             })
             .catch((error) => {
                 Logger.error(`Error submitting Post: ${error}`);
@@ -38,30 +40,14 @@ const SafetyPostScreen = () => {
     return (
         <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
             <Text style={styles.title}>Create Safety Post</Text>
-            <TextInput
-                placeholder="Title"
-                value={title}
-                onChangeText={setTitle}
-                style={styles.input}
-            />
-            <TextInput
-                placeholder="Author"
-                value={author}
-                onChangeText={setAuthor}
-                style={styles.input}
-            />
+            <TextInput placeholder="Title" value={title} onChangeText={setTitle} style={styles.input} />
+            <TextInput placeholder="Author" value={author} onChangeText={setAuthor} style={styles.input} />
             <View style={styles.switchContainer}>
                 <Text style={styles.label}>Public:</Text>
                 <Switch value={isPublic} onValueChange={setIsPublic} />
             </View>
-            <TextInput
-                placeholder="Content"
-                value={content}
-                onChangeText={setContent}
-                multiline
-                style={[styles.input, styles.textArea]}
-            />
-            <Button title="Submit Post" onPress={createPost} color="#990000" />
+            <TextInput placeholder="Content" value={content} onChangeText={setContent} multiline style={[styles.input, styles.textArea]} />
+            <Button title="Submit Post" onPress={createPost} color={Colors.primary} />
         </ScrollView>
     );
 };
@@ -70,7 +56,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 30,
-        backgroundColor: "#fff",
+        backgroundColor: Colors.background,
     },
     title: {
         fontSize: 28,
@@ -80,7 +66,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 40,
-        borderColor: "#ccc",
+        borderColor: Colors.border,
         borderWidth: 1,
         borderRadius: 5,
         marginBottom: 10,

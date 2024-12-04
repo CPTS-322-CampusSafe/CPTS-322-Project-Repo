@@ -1,7 +1,8 @@
 import AuthenticationSystem from "@/backend_apis/authentication_system/authentication_system";
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
-import { useRouter } from 'expo-router';
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from "react-native";
+import { useRouter } from "expo-router";
+import { Colors } from "@/constants/colors";
 
 // The minimum length for the user's password
 const minimumPasswordLength = 8;
@@ -41,7 +42,7 @@ export default function RegisterScreen() {
             if (result.success) {
                 Alert.alert("Registration successful!");
                 // Redirect to login screen here
-                router.push('/');
+                router.push("/");
             } else {
                 setError(result.message);
             }
@@ -69,7 +70,9 @@ export default function RegisterScreen() {
 
             {error.main.length !== 0 ? <Text style={styles.errorMessage}>{error.main[0]}</Text> : null}
 
-            <Button title="Register" onPress={handleRegister} />
+            <TouchableOpacity style={styles.button} onPress={handleRegister}>
+                <Text style={styles.buttonText}>Register</Text>
+            </TouchableOpacity>
         </View>
     );
 }
@@ -79,7 +82,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         padding: 20,
-        backgroundColor: "#fff",
+        backgroundColor: Colors.background,
     },
     title: {
         fontSize: 24,
@@ -88,13 +91,25 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 40,
-        borderColor: "#ccc",
+        borderColor: Colors.border,
         borderWidth: 1,
         marginBottom: 10,
         paddingHorizontal: 10,
     },
+    button: {
+        backgroundColor: Colors.primary,
+        padding: 5,
+        borderRadius: 5,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    buttonText: {
+        color: Colors.primaryText,
+        fontSize: 16,
+        fontWeight: "bold",
+    },
     errorMessage: {
-        color: "red",
+        color: Colors.errorMessage,
         fontSize: 12,
         marginBottom: 10,
     },

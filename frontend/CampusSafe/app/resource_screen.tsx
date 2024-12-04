@@ -7,15 +7,18 @@ import { Colors } from "@/constants/colors";
 import { useRouter } from "expo-router";
 import Logger from "@/logging/logging";
 import LoadingSpinner from "@/components/loading_spinner";
+import AuthenticationSystem from "@/backend_apis/authentication_system/authentication_system";
 
 const ResourcesScreen = () => {
     const [posts, setPosts] = React.useState<SafetyPost[] | undefined>(undefined);
     const [currentPost, setCurrentPost] = React.useState<SafetyPost | undefined>(undefined);
+    const [isUserAdmin, setIsUserAdmin] = React.useState<boolean>(false);
     const router = useRouter();
 
     const handleCreatePost = () => {
         router.push("/create_post"); // Navigate to the create_post screen
     };
+
     React.useEffect(() => {
         SafetyPostSystem.getPosts()
             .then((result) => {
@@ -29,6 +32,15 @@ const ResourcesScreen = () => {
             .catch((error) => {
                 Logger.error("Error in retrieving posts.");
             });
+
+        AuthenticationSystem.getProfile().then((result) => {
+            if (result.success) {
+                Logger.debug("Successfully got profile.");
+                setIsUserAdmin(result.data.is_user_admin);
+            } else {
+                Logger.debug("Failed to get profile.");
+            }
+        });
     }, []);
 
     return (
@@ -38,9 +50,14 @@ const ResourcesScreen = () => {
             ) : currentPost === undefined ? ( // If a post is not selected yet:
                 // Post list:
                 <>
-                    <TouchableOpacity style={styles.button} onPress={handleCreatePost}>
-                        <Text style={styles.buttonText}>Create Post</Text>
-                    </TouchableOpacity>
+                    {/* The user must be an admin to create a post */}
+                    {isUserAdmin ? (
+                        <TouchableOpacity style={styles.button} onPress={handleCreatePost}>
+                            <Text style={styles.buttonText}>Create Post</Text>
+                        </TouchableOpacity>
+                    ) : (
+                        <></>
+                    )}
 
                     <FlatList
                         data={posts}

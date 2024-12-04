@@ -14,31 +14,18 @@ const Settings = () => {
             <View style={styles.rowContainer}>
                 <View style={styles.row}>
                     <Text style={styles.label}>Email Notifications</Text>
-                    <Switch
-                        value={emailEnabled}
-                        onValueChange={() => setEmailEnabled((prev) => !prev)}
-                    />
+                    <Switch value={emailEnabled} onValueChange={() => setEmailEnabled((prev) => !prev)} />
                 </View>
                 <View style={styles.row}>
                     <Text style={styles.label}>Push Notifications</Text>
-                    <Switch
-                        value={pushEnabled}
-                        onValueChange={() => setPushEnabled((prev) => !prev)}
-                    />
+                    <Switch value={pushEnabled} onValueChange={() => setPushEnabled((prev) => !prev)} />
                 </View>
                 <View style={styles.row}>
                     <Text style={styles.label}>Text Message Notifications</Text>
-                    <Switch
-                        value={textEnabled}
-                        onValueChange={() => setTextEnabled((prev) => !prev)}
-                    />
+                    <Switch value={textEnabled} onValueChange={() => setTextEnabled((prev) => !prev)} />
                 </View>
             </View>
-            <Button
-                title="Close"
-                onPress={() => router.push("/")}
-                color="#990000"
-            />
+            <Button title="Close" onPress={() => router.push("/")} color="#990000" />
         </View>
     );
 };
@@ -47,25 +34,25 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 30,
-        justifyContent: 'flex-start',
+        justifyContent: "flex-start",
     },
     title: {
         fontSize: 28,
-        fontWeight: 'bold',
+        fontWeight: "bold",
         marginTop: 20,
         marginBottom: 20,
-        textAlign: 'center',
+        textAlign: "center",
         paddingVertical: 10,
     },
     rowContainer: {
-        alignItems: "center", 
+        alignItems: "center",
         margin: 50,
     },
     row: {
-        flexDirection: "row", 
-        alignItems: "center", 
-        justifyContent: "space-between", 
-        width: '50%', 
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        width: "50%",
         paddingBottom: 10,
     },
     label: {
@@ -74,7 +61,7 @@ const styles = StyleSheet.create({
     },
     switch: {
         alignItems: "center",
-    }
+    },
 });
 
 export default Settings;

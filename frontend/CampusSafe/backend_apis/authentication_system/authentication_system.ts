@@ -1,6 +1,7 @@
 import Logger from "@/logging/logging";
 import * as SecureStore from "expo-secure-store";
 import { authAPI_URL } from "../urls";
+import { Platform } from "react-native";
 
 /**
  * Handles all the authentication operations such as logging in, registering, and logging out.
@@ -14,12 +15,14 @@ export default class AuthenticationSystem {
     static init(): Promise<boolean> {
         return new Promise((resolve, reject) => {
             // Get stored CSRF token if it exists
-            SecureStore.getItemAsync("csrfToken").then((token) => {
-                if (token != null && token !== "") {
-                    AuthenticationSystem.csrfToken = token;
-                    resolve(true);
-                }
-            });
+            if (Platform.OS !== "web") {
+              SecureStore.getItemAsync("csrfToken").then((token) => {
+                  if (token != null && token !== "") {
+                      AuthenticationSystem.csrfToken = token;
+                      resolve(true);
+                  }
+              });
+            }
 
             // Get the CSRF token
             fetch(`${authAPI_URL}/get_csrf_token/`)
@@ -28,7 +31,9 @@ export default class AuthenticationSystem {
                     AuthenticationSystem.csrfToken = json.csrfToken;
 
                     // Store the token
-                    SecureStore.setItemAsync("csrfToken", AuthenticationSystem.csrfToken);
+                    if (Platform.OS !== "web") {
+                        SecureStore.setItemAsync("csrfToken", AuthenticationSystem.csrfToken);
+                    }
                     resolve(true);
                 })
                 .catch((error) => {

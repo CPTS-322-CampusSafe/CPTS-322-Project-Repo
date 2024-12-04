@@ -9,31 +9,38 @@ import { Platform } from "react-native";
 export default class AuthenticationSystem {
     static csrfToken = "";
 
-    static {
-        // Get stored CSRF token if it exists
+    /**
+     * Initalizes this class.
+     */
+    static init(): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            // Get stored CSRF token if it exists
+            if (Platform.OS !== "web") {
+              SecureStore.getItemAsync("csrfToken").then((token) => {
+                  if (token != null && token !== "") {
+                      AuthenticationSystem.csrfToken = token;
+                      resolve(true);
+                  }
+              });
+            }
 
-        if (Platform.OS !== "web") {
-            SecureStore.getItemAsync("csrfToken").then((token) => {
-                if (token != null && token !== "") {
-                    AuthenticationSystem.csrfToken = token;
-                }
-            });
-        }
+            // Get the CSRF token
+            fetch(`${authAPI_URL}/get_csrf_token/`)
+                .then((response) => response.json())
+                .then((json) => {
+                    AuthenticationSystem.csrfToken = json.csrfToken;
 
-        // Get the CSRF token
-        fetch(`${authAPI_URL}/get_csrf_token/`)
-            .then((response) => response.json())
-            .then((json) => {
-                AuthenticationSystem.csrfToken = json.csrfToken;
-
-                // Store the token
-                if (Platform.OS !== "web") {
-                    SecureStore.setItemAsync("csrfToken", AuthenticationSystem.csrfToken);
-                }
-            })
-            .catch((error) => {
-                Logger.error(error); // There was an error
-            });
+                    // Store the token
+                    if (Platform.OS !== "web") {
+                        SecureStore.setItemAsync("csrfToken", AuthenticationSystem.csrfToken);
+                    }
+                    resolve(true);
+                })
+                .catch((error) => {
+                    Logger.error(error); // There was an error
+                    resolve(false);
+                });
+        });
     }
 
     /**
@@ -54,7 +61,13 @@ export default class AuthenticationSystem {
                     password: password,
                 }),
             })
-                .then((response) => response.json())
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        resolve({ success: false, message: "Failed to login." });
+                    }
+                })
                 .then((json) => {
                     // Get the CSRF token
                     fetch(`${authAPI_URL}/get_csrf_token/`)
@@ -162,38 +175,48 @@ export default class AuthenticationSystem {
     }
 
     /**
+     * Checks if the given register info is valid or not.
+     *
+     * @param username The username.
+     * @param email The user's email.
+     * @param password The password.
+     * @param phoneNumber The user's phone number.
+     * @returns Any errors.
+     */
+    static verify_register_info(username: string, email: string, password: string, phoneNumber: string): Record<string, string[]> {
+        let message: Record<string, string[]> = { username: [], password: [], email: [], phoneNumber: [], main: [] };
+
+        // Make sure the fields are not empty:
+        if (username === "") {
+            message.username.push("The field may not be blank");
+        }
+
+        if (password === "") {
+            message.password.push("The field may not be blank");
+        }
+
+        if (email === "") {
+            message.email.push("The field may not be blank");
+        }
+
+        if (phoneNumber === "") {
+            message.phoneNumber.push("The field may not be blank");
+        }
+
+        return message;
+    }
+
+    /**
      * Tries to create a new account for the user with the given information.
      *
      * @returns A Promise the holds a success boolean and a message containing any errors.
      */
     static register(username: string, email: string, password: string, phoneNumber: string): Promise<{ success: boolean; message: Record<string, string[]> }> {
         let success = false;
-        let message: Record<string, string[]> = { username: [], password: [], email: [], phoneNumber: [], main: [] };
-        let foundError = false;
+        let message: Record<string, string[]> = this.verify_register_info(username, email, password, phoneNumber);
 
-        // Make sure the fields are not empty:
-        if (username === "") {
-            message.username.push("The field may not be blank");
-            foundError = true;
-        }
-
-        if (password === "") {
-            message.password.push("The field may not be blank");
-            foundError = true;
-        }
-
-        if (email === "") {
-            message.email.push("The field may not be blank");
-            foundError = true;
-        }
-
-        if (phoneNumber === "") {
-            message.phoneNumber.push("The field may not be blank");
-            foundError = true;
-        }
-
-        // Early exit
-        if (foundError) {
+        // Early exit:
+        if (message["username"].length !== 0 || message["email"].length !== 0 || message["password"].length !== 0 || message["phoneNumber"].length !== 0 || message["main"].length !== 0) {
             return new Promise((resolve) => {
                 resolve({ success: success, message: message });
             });

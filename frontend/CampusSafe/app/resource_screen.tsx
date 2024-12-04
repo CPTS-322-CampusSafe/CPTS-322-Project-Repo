@@ -208,11 +208,15 @@ const styles = StyleSheet.create({
         color: Colors.primary,
     },
     button: {
-        backgroundColor: Colors.primary,
-        paddingVertical: 12,
-        paddingHorizontal: 20,
+        width: 140,
+        height: 34,
+        position: "absolute",
+        top: 20, // Position it near the top
+        right: 20, // Align to the right side
+        backgroundColor: "#990000", // Button color
+        padding: 5,
         borderRadius: 5,
-        margin: 10,
+        justifyContent: "center",
         alignItems: "center",
     },
     buttonText: {

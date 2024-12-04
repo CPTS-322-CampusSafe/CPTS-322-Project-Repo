@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useRouter } from "expo-router";
 import HomeHeader from "@/components/home_header";
 import ResourcesScreen from "./resource_screen";
+import ProfileScreen from "./profile";
 
 const Tab = createBottomTabNavigator();
 
@@ -33,12 +34,6 @@ const ReportsScreen = () => {
         </View>
     );
 };
-
-const ProfileScreen = () => (
-    <View style={styles.screen}>
-        <Text>No Profile Information</Text>
-    </View>
-);
 
 export default function Home() {
     return (
@@ -70,6 +65,7 @@ export default function Home() {
         </View>
     );
 }
+
 const styles = StyleSheet.create({
     button: {
         width: 140,

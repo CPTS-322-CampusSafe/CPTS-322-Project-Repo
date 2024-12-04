@@ -3,6 +3,7 @@ import { TextInput, View, Text, StyleSheet, TouchableOpacity } from "react-nativ
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useRouter } from "expo-router";
 import HomeHeader from "@/components/home_header";
+import ResourcesScreen from "./resource_screen";
 
 const Tab = createBottomTabNavigator();
 
@@ -32,12 +33,6 @@ const ReportsScreen = () => {
         </View>
     );
 };
-
-const ResourcesScreen = () => (
-    <View style={styles.screen}>
-        <Text>No Resources Available</Text>
-    </View>
-);
 
 const ProfileScreen = () => (
     <View style={styles.screen}>

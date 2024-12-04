@@ -92,34 +92,35 @@ const ResourcesScreen = () => {
 
     return (
         <View style={styles.screen}>
-            <TouchableOpacity style={styles.button} onPress={handleCreatePost}>
-                <Text style={styles.buttonText}>Create Post</Text>
-            </TouchableOpacity>
-
             {currentPost === undefined ? (
                 // Post list:
+                <>
+                    <TouchableOpacity style={styles.button} onPress={handleCreatePost}>
+                        <Text style={styles.buttonText}>Create Post</Text>
+                    </TouchableOpacity>
 
-                <FlatList
-                    data={posts}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                            onPress={() => {
-                                setCurrentPost(item);
-                            }}
-                        >
-                            <View style={styles.postContainer}>
-                                <Text style={styles.title}>{item.title}</Text>
-                                <Text style={styles.author}>By: {item.author}</Text>
-                                <Text style={styles.date}>Date: {item.createdAt.toLocaleDateString()}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                    contentContainerStyle={styles.listContainer}
-                />
+                    <FlatList
+                        data={posts}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setCurrentPost(item);
+                                }}
+                            >
+                                <View style={styles.postContainer}>
+                                    <Text style={styles.title}>{item.title}</Text>
+                                    <Text style={styles.author}>By: {item.author}</Text>
+                                    <Text style={styles.date}>Date: {item.createdAt.toLocaleDateString()}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                        contentContainerStyle={styles.listContainer}
+                    />
+                </>
             ) : (
                 // Individual post:
-                <View style={styles.screen}>
+                <>
                     <Pressable
                         onPress={() => {
                             setCurrentPost(undefined);
@@ -137,7 +138,7 @@ const ResourcesScreen = () => {
                             <HTMLView value={`<div>${htmlContent.replace(/(\r\n|\n|\r)/gm, "")}</div>`} stylesheet={htmlStyles} textComponentProps={{ style: htmlStyles.p }} />
                         )}
                     </ScrollView>
-                </View>
+                </>
             )}
         </View>
     );
@@ -164,8 +165,8 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     listContainer: {
-        padding: 16,
         flexGrow: 1,
+        padding: 16,
     },
     postContainer: {
         marginBottom: 16,
@@ -210,14 +211,13 @@ const styles = StyleSheet.create({
     button: {
         width: 140,
         height: 34,
-        position: "absolute",
-        top: 20, // Position it near the top
-        right: 20, // Align to the right side
         backgroundColor: "#990000", // Button color
         padding: 5,
         borderRadius: 5,
         justifyContent: "center",
         alignItems: "center",
+        alignSelf: "flex-end",
+        margin: 20,
     },
     buttonText: {
         color: "white",

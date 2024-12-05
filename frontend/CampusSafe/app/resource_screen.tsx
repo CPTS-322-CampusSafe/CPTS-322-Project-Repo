@@ -71,7 +71,7 @@ const ResourcesScreen = () => {
                                 <View style={styles.postContainer}>
                                     <Text style={styles.title}>{item.title}</Text>
                                     <Text style={styles.author}>By: {item.author}</Text>
-                                    <Text style={styles.date}>Date: {item.createdAt.toLocaleDateString()}</Text>
+                                    {/*<Text style={styles.date}>Date: {item.createdAt.toLocaleDateString()}</Text>*/}
                                 </View>
                             </TouchableOpacity>
                         )}

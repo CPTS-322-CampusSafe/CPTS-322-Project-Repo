@@ -72,8 +72,9 @@ const styles = StyleSheet.create({
         margin: "auto",
         padding: 20,
         borderWidth: 1,
-        borderColor: "#ccc",
+        borderColor: Colors.border,
         borderRadius: 8,
+        backgroundColor: Colors.background,
     },
     title: {
         textAlign: "center",
@@ -88,14 +89,14 @@ const styles = StyleSheet.create({
         padding: 10,
         marginVertical: 5,
         borderWidth: 1,
-        borderColor: "#ccc",
+        borderColor: Colors.border,
         borderRadius: 4,
     },
     errorInput: {
-        borderColor: "red",
+        borderColor: Colors.errorMessage,
     },
     errorMessage: {
-        color: "red",
+        color: Colors.errorMessage,
         fontSize: 12,
         marginBottom: 10,
     },
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     loginBtnText: {
-        color: "#fff",
+        color: Colors.primaryText,
         fontSize: 16,
     },
     footerText: {
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     registerText: {
-        color: "blue",
+        color: Colors.link,
         fontSize: 16,
     },
 });

@@ -71,7 +71,7 @@ const ResourcesScreen = () => {
                                 <View style={styles.postContainer}>
                                     <Text style={styles.title}>{item.title}</Text>
                                     <Text style={styles.author}>By: {item.author}</Text>
-                                    <Text style={styles.date}>Date: {item.createdAt.toLocaleDateString()}</Text>
+                                    {/*<Text style={styles.date}>Date: {item.createdAt.toLocaleDateString()}</Text>*/}
                                 </View>
                             </TouchableOpacity>
                         )}
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         padding: 16,
         borderRadius: 8,
-        backgroundColor: "#f9f9f9",
+        backgroundColor: Colors.background,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     button: {
         width: 140,
         height: 34,
-        backgroundColor: "#990000", // Button color
+        backgroundColor: Colors.primary, // Button color
         padding: 5,
         borderRadius: 5,
         justifyContent: "center",
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
         margin: 20,
     },
     buttonText: {
-        color: "white",
+        color: Colors.primaryText,
         fontSize: 16,
         fontWeight: "bold",
     },
